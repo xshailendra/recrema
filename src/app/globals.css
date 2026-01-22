@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F9F4EE;
+  --foreground: #004733;
+  --accent-yellow: #FFD572;
+  --accent-peach: #FFF1E1;
+  --text-green: #004733;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-brand-green: var(--text-green);
+  --color-brand-yellow: var(--accent-yellow);
+  --color-brand-peach: var(--accent-peach);
+  --color-brand-black: #000000;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Anton', 'Saira Stencil One', var(--font-anton), cursive;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), sans-serif;
+  position: relative;
+}
+
+/* Global Grainy Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.04;
+  z-index: 9999;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  filter: contrast(120%) brightness(100%);
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .glass {
+    @apply bg-white/40 backdrop-blur-xl border border-white/20 shadow-lg;
+  }
+
+  .glass-dark {
+    @apply bg-black/10 backdrop-blur-lg border border-white/10;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 20px rgba(255, 213, 114, 0.3);
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+*:not(.no-transition):not(.no-transition *) {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+button:active {
+  @apply scale-95;
+}
+
+/* Disable CSS transitions for framer-motion elements */
+.no-transition,
+.no-transition * {
+  transition: none !important;
+}
+
+/* Transparent strikethrough effect for titles */
+.title-strikethrough {
+  position: relative;
+  display: inline-block;
+}
+
+.title-strikethrough::after {
+  content: '';
+  position: absolute;
+  left: -10%;
+  right: -10%;
+  top: 0.60em;
+  height: 0.08em;
+  background: var(--background);
+  pointer-events: none;
 }
