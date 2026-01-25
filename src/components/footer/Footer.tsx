@@ -129,7 +129,7 @@ export function Footer() {
                                     <Phone className="w-4 h-4 text-brand-green" />
                                 </div>
                                 <div>
-                                    <p className="text-xs text-brand-green/50 mb-0.5 uppercase tracking-wide">Phone</p>
+                                    <p className="text-xs text-brand-green/50 mb-0.5 uppercase tracking-wide">Whatsapp</p>
                                     <span className="text-brand-green/80 font-medium text-sm">+91 9649154803, 7073425362</span>
                                 </div>
                             </li>
