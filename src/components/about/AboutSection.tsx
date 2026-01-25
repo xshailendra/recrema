@@ -189,7 +189,7 @@ export function AboutSection() {
                     <span className="inline-block px-4 py-1.5 bg-brand-green/10 rounded-full text-brand-green text-sm font-semibold mb-4">
                         About Us
                     </span>
-                    <h2 className="text-5xl md:text-7xl font-display text-brand-green uppercase leading-tight">
+                    <h2 className="text-4xl ss:text-7xl md:text-8xl font-display text-brand-green uppercase leading-tight">
                         Our Story
                     </h2>
                 </motion.div>
@@ -210,7 +210,7 @@ export function AboutSection() {
                     </motion.h3>
 
                     <motion.div
-                        className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-brand-green/10 mb-12"
+                        className="bg-white rounded-3xl p-5 ss:p-8 md:p-12 shadow-xl border border-brand-green/10 mb-12"
                         variants={cardVariants}
                     >
                         <div className="prose prose-lg max-w-none">
@@ -422,14 +422,14 @@ export function AboutSection() {
                     variants={staggerContainer}
                 >
                     <motion.div
-                        className="bg-gradient-to-r from-brand-green via-brand-green to-brand-green/90 rounded-3xl p-10 md:p-16 text-white relative overflow-hidden"
+                        className="bg-gradient-to-r from-brand-green via-brand-green to-brand-green/90 rounded-3xl p-6 ss:p-10 md:p-16 text-white relative overflow-hidden"
                         variants={cardVariants}
                     >
                         <div className="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 -translate-x-1/2" />
                         <div className="absolute bottom-0 right-0 w-80 h-80 bg-white/5 rounded-full translate-y-1/2 translate-x-1/2" />
 
                         <div className="relative z-10">
-                            <h3 className="text-3xl md:text-5xl font-display uppercase mb-4">
+                            <h3 className="text-2xl ss:text-3xl md:text-5xl font-display uppercase mb-4">
                                 Get Involved
                             </h3>
                             <p className="text-xl md:text-2xl text-white/90 mb-2">Every Cup Counts!</p>

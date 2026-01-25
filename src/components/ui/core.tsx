@@ -61,7 +61,7 @@ export function SectionTitle({
 }) {
     return (
         <div className={cn('flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12', className)}>
-            <h2 className="text-6xl md:text-8xl font-display uppercase leading-[0.8] text-brand-green">
+            <h2 className="text-4xl ss:text-5xl xs:text-6xl md:text-8xl font-display uppercase leading-[0.8] text-brand-green">
                 {title}
             </h2>
             {subtitle && (

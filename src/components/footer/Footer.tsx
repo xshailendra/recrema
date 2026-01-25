@@ -53,16 +53,16 @@ export function Footer() {
                             Recrema transforms coffee waste into high-value eco-ingredients, pioneering India&apos;s transition to a circular economy.
                         </p>
                         <div className="flex gap-3 pt-2">
-                            <a href="#" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
+                            <a href="https://www.instagram.com/_recrema_/" className="w-8 h-8 ss:w-9 ss:h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
                                 <Instagram className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </a>
-                            <a href="#" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
+                            <a href="https://www.facebook.com/share/19VaNVWpND/" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
                                 <Facebook className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </a>
-                            <a href="#" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
+                            <a href="https://www.linkedin.com/company/visionforge-ventures-pvt-ltd/" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
                                 <Linkedin className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </a>
-                            <a href="#" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
+                            <a href="https://x.com/Recrema041125" className="w-9 h-9 rounded-full bg-brand-green/5 flex items-center justify-center text-brand-green hover:bg-brand-green hover:text-white transition-all duration-300 group">
                                 <Twitter className="w-4 h-4 group-hover:scale-110 transition-transform" />
                             </a>
                         </div>
@@ -156,8 +156,8 @@ export function Footer() {
                     viewport={{ once: true, amount: 0.5 }}
                     transition={{ type: 'spring', stiffness: 70, damping: 15, delay: 0.4 }}
                 >
-                    <p className="text-brand-green/60">© 2025 Recrema Pvt. Ltd. All rights reserved.</p>
-                    <div className="flex gap-6 md:gap-8">
+                    <p className="text-brand-green/60">©️ 2026 Recrema.com. All rights reserved. Property of VisionForge Ventures Pvt. Ltd.</p>
+                    <div className="flex flex-col ss:flex-row items-center gap-2 ss:gap-6 md:gap-8 text-center ss:text-left">
                         <span className="text-brand-green/60">
                             Designed and created by{' '}
                             <Link href="https://shailendra-soni-portfolio.vercel.app" className="hover:text-brand-green transition-colors font-semibold">

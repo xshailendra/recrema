@@ -65,12 +65,12 @@ export function ExtractsSection() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
-                        className="inline-block bg-brand-green text-brand-yellow px-8 py-2.5 rounded-full text-sm font-bold tracking-[0.2em] uppercase mb-10 shadow-lg shadow-brand-green/10"
+                        className="inline-block bg-brand-green text-brand-yellow px-4 ss:px-8 py-2.5 rounded-full text-xs ss:text-sm font-bold tracking-[0.2em] uppercase mb-10 shadow-lg shadow-brand-green/10"
                     >
                         The Science of Purity
                     </motion.div>
 
-                    <h1 className="text-6xl md:text-8xl font-display text-brand-green uppercase leading-none mb-10 tracking-tight">
+                    <h1 className="text-4xl ss:text-6xl md:text-8xl font-display text-brand-green uppercase leading-none mb-10 tracking-tight">
                         <SplitText text="OUR" /> <br />
                         <span className="text-brand-green/30 italic">
                             <SplitText text="EXTRACTS" />
@@ -83,7 +83,7 @@ export function ExtractsSection() {
                         transition={{ delay: 1, duration: 0.8 }}
                         className="flex flex-col items-center gap-8"
                     >
-                        <p className="text-2xl md:text-3xl text-brand-green/80 font-medium leading-tight max-w-3xl">
+                        <p className="text-xl ss:text-2xl md:text-3xl text-brand-green/80 font-medium leading-tight max-w-3xl">
                             Transforming nature&apos;s leftovers into high-purity, bio-active ingredients.
                         </p>
                         <motion.div
@@ -112,7 +112,7 @@ export function ExtractsSection() {
 
                 {/* Bottom CTA with Premium Feel */}
                 <motion.div
-                    className="mt-48 bg-brand-green rounded-[5rem] p-16 md:p-32 text-center relative overflow-hidden"
+                    className="mt-48 bg-brand-green rounded-[5rem] p-8 ss:p-16 md:p-32 text-center relative overflow-hidden"
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -122,7 +122,7 @@ export function ExtractsSection() {
 
                     <div className="relative z-10 max-w-4xl mx-auto space-y-16">
                         <motion.h2
-                            className="text-4xl md:text-8xl font-display text-white uppercase leading-[0.85] tracking-tight"
+                            className="text-3xl ss:text-5xl md:text-8xl font-display text-white uppercase leading-[0.85] tracking-tight"
                             initial={{ opacity: 0, scale: 0.9 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.8 }}
@@ -130,7 +130,7 @@ export function ExtractsSection() {
                             Elevate Your <br />
                             <span className="text-brand-yellow italic">Formulations</span>
                         </motion.h2>
-                        <p className="text-white/60 text-2xl font-medium max-w-2xl mx-auto">
+                        <p className="text-white/60 text-lg ss:text-2xl font-medium max-w-2xl mx-auto">
                             Join the circular economy by sourcing sustainable, high-purity coffee extracts for your next innovation.
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
@@ -143,11 +143,7 @@ export function ExtractsSection() {
                                     Start Partnership
                                 </motion.button>
                             </Link>
-                            <Link href="/about">
-                                <button className="text-white border-b-2 border-white/20 hover:border-brand-yellow transition-colors font-bold uppercase tracking-widest py-2 text-sm">
-                                    Our Extraction Process
-                                </button>
-                            </Link>
+
                         </div>
                     </div>
                 </motion.div>
@@ -244,14 +240,14 @@ function ExtractItem({ item, index, isEven }: ExtractItemProps) {
 
                     <motion.h2
                         variants={fadeInUp}
-                        className="text-6xl md:text-8xl font-display text-brand-green uppercase leading-none tracking-tighter"
+                        className="text-4xl ss:text-6xl md:text-8xl font-display text-brand-green uppercase leading-none tracking-tighter"
                     >
                         {item.name}
                     </motion.h2>
 
                     <motion.p
                         variants={fadeInUp}
-                        className="text-2xl text-brand-green/70 leading-relaxed font-medium"
+                        className="text-lg ss:text-2xl text-brand-green/70 leading-relaxed font-medium"
                     >
                         {item.description}
                     </motion.p>

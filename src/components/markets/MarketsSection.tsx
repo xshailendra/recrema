@@ -69,7 +69,7 @@ export function MarketsSection() {
                             >
                                 Industrial Horizon
                             </motion.span>
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display text-brand-green uppercase leading-[0.85] tracking-tighter">
+                            <h1 className="text-3xl ss:text-4xl md:text-5xl lg:text-6xl font-display text-brand-green uppercase leading-[0.85] tracking-tighter">
                                 <SplitText text="MARKETS" /> <br />
                                 <span className="text-brand-green/20 italic">
                                     <SplitText text="WE SERVE" delay={0.4} />
@@ -123,7 +123,7 @@ export function MarketsSection() {
             {/* Final Navigation */}
             <section className="mt-48">
                 <Container>
-                    <div className="bg-brand-green rounded-[4rem] p-16 md:p-32 relative overflow-hidden">
+                    <div className="bg-brand-green rounded-[4rem] p-8 ss:p-16 md:p-32 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-24 items-center text-white">
                             <div className="space-y-10">
@@ -207,7 +207,7 @@ function GalleryItem({ market, size }: GalleryItemProps) {
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-green/90 via-brand-green/20 to-transparent" />
             </div>
 
-            <div className={`absolute bottom-0 left-0 w-full p-8 md:p-12 lg:p-16 flex flex-col justify-end text-white ${isFeatured ? 'lg:flex-row lg:items-end lg:justify-between gap-12' : 'space-y-6'
+            <div className={`absolute bottom-0 left-0 w-full p-5 ss:p-8 md:p-12 lg:p-16 flex flex-col justify-end text-white ${isFeatured ? 'lg:flex-row lg:items-end lg:justify-between gap-12' : 'space-y-6'
                 } z-10 transition-opacity duration-500 group-hover:opacity-0`}>
                 <div className="max-w-2xl space-y-4">
                     <span className="text-brand-yellow font-bold uppercase tracking-[0.4em] text-[10px] opacity-80 mb-2 block">
@@ -243,7 +243,7 @@ function GalleryItem({ market, size }: GalleryItemProps) {
                             whileInView={{ x: 0, opacity: 1 }}
                             className="flex justify-between items-start"
                         >
-                            <span className="text-brand-green/10 text-[6rem] md:text-[8rem] font-display leading-[0.6] -ml-4">0{market.id}</span>
+                            <span className="text-brand-green/10 text-[12vw] xs:text-[15vw] ss:text-[6rem] md:text-[8rem] font-display leading-[0.6] -ml-4">0{market.id}</span>
                             <div className="w-20 h-20 rounded-full border border-brand-green/10 flex items-center justify-center group-hover:bg-brand-green group-hover:text-white transition-all duration-500">
                                 <MoveRight className="w-8 h-8" />
                             </div>

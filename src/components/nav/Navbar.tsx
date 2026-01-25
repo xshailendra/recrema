@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 // Navigation links
 const navLinks = [
-    { name: 'About', href: '/about' },
+    { name: 'About Us', href: '/about' },
     { name: 'Our Extracts', href: '/extracts' },
     { name: 'Markets', href: '/markets' },
     { name: 'Technology', href: '/technology' },
@@ -97,11 +97,11 @@ export function Navbar() {
             initial="hidden"
             animate="visible"
         >
-            <div className="relative flex items-center justify-between bg-[#FFF1E1] rounded-full px-2 py-2 shadow-lg w-full max-w-2xl border border-brand-green/10">
+            <div className="relative flex items-center justify-between bg-[#FFF1E1] rounded-full px-1.5 ss:px-2 py-1.5 ss:py-2 shadow-lg w-full max-w-2xl border border-brand-green/10">
                 <div className="flex items-center relative" ref={menuRef}>
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-white rounded-full text-brand-green text-sm font-bold shadow-sm hover:bg-white/90 transition-all"
+                        className="flex items-center gap-2 px-3 ss:px-6 py-2 ss:py-2.5 bg-white rounded-full text-brand-green text-sm font-bold shadow-sm hover:bg-white/90 transition-all"
                     >
                         <motion.svg
                             width="18"
@@ -118,7 +118,7 @@ export function Navbar() {
                             <line x1="4" x2="20" y1="9" y2="9" />
                             <line x1="4" x2="20" y1="15" y2="15" />
                         </motion.svg>
-                        Menu
+                        <span className="hidden ss:inline">Menu</span>
                     </button>
 
                     {/* Dropdown Menu */}
@@ -149,16 +149,17 @@ export function Navbar() {
                     </AnimatePresence>
                 </div>
 
-                <Link href="/" className="text-xl font-display text-brand-green tracking-tight">
+                <Link href="/" className="text-lg ss:text-xl font-display text-brand-green tracking-tight">
                     RECREMA
                 </Link>
 
                 <div className="flex items-center">
                     <Link
                         href="/contact"
-                        className="px-6 py-2.5 bg-white rounded-full text-brand-green text-sm font-bold shadow-sm hover:bg-white/90 transition-all border border-brand-green/5"
+                        className="px-3 ss:px-6 py-2 ss:py-2.5 bg-white rounded-full text-brand-green text-sm font-bold shadow-sm hover:bg-white/90 transition-all border border-brand-green/5 whitespace-nowrap"
                     >
-                        Partner With Us
+                        <span className="ss:hidden text-[11px]">Partner With  us</span>
+                        <span className="hidden ss:inline">Partner With Us</span>
                     </Link>
                 </div>
             </div>

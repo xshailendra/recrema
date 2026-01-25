@@ -58,7 +58,7 @@ export function MenuTabs() {
 
                 {/* Animated Tabs */}
                 <motion.div
-                    className="no-transition flex flex-wrap gap-4 mb-16 px-1 py-1 bg-white/50 backdrop-blur-sm rounded-full w-fit max-w-full overflow-x-auto no-scrollbar"
+                    className="no-transition flex flex-nowrap gap-2 ss:gap-4 mb-16 px-1 py-1 bg-white/50 backdrop-blur-sm rounded-full w-fit max-w-full overflow-x-auto scrollbar-hide"
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
@@ -69,7 +69,7 @@ export function MenuTabs() {
                             key={category}
                             onClick={() => setActiveTab(category)}
                             className={cn(
-                                'no-transition px-8 py-3 rounded-full text-sm font-bold whitespace-nowrap',
+                                'no-transition px-4 ss:px-8 py-3 rounded-full text-xs ss:text-sm font-bold whitespace-nowrap',
                                 activeTab === category
                                     ? 'bg-white text-brand-green shadow-sm'
                                     : 'text-brand-green/60 hover:text-brand-green'

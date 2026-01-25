@@ -16,7 +16,7 @@ export const MENU_ITEMS = [
     },
     {
         id: 2,
-        name: 'PHARMA CAFFEINE',
+        name: 'CAFFEINE ANHYDROUS',
         description: 'Naturally derived, pharmaceutical-grade caffeine refined to meet stringent purity standards for medicines and supplements.',
         category: 'PHARMA',
         image: '/images/product-caffeine.png',
@@ -36,7 +36,7 @@ export const MENU_ITEMS = [
         description: 'Nutrient-rich organic fertilizer that enhances soil water retention, aeration, and microbial activity for better yields.',
         category: 'AGRICULTURE',
         image: '/images/product-fertilizer.png',
-        applications: ['Organic farms', 'Nurseries', 'Horticulture', 'Soil revitalization'],
+        applications: ['Organic farms', 'Nurseries', 'Home Gardening', 'Soil revitalization'],
     },
 ];
 
@@ -142,7 +142,7 @@ export const FAQS = [
     {
         id: 4,
         question: 'Is your process environmentally friendly?',
-        answer: 'Absolutely. Our circular model ensures zero waste goes to landfill, reduces methane emissions, and creates sustainable alternatives to synthetic ingredients.',
+        answer: 'Absolutely! Our process as well as products are environment friendly and our circular model ensures zero waste goes to landfill, reduces methane emissions, and creates sustainable alternatives to synthetic ingredients.',
     },
     {
         id: 5,

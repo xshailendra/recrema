@@ -130,7 +130,7 @@ export function ContactForm() {
                         <span className="inline-block px-4 py-1.5 bg-brand-green/10 rounded-full text-brand-green text-sm font-semibold mb-4">
                             Get In Touch
                         </span>
-                        <h1 className="text-5xl md:text-7xl font-display text-brand-green uppercase mb-4">
+                        <h1 className="text-4xl ss:text-5xl md:text-7xl font-display text-brand-green uppercase mb-4">
                             Partner With Us
                         </h1>
                         <p className="text-brand-green/70 text-lg max-w-2xl mx-auto">
@@ -172,7 +172,7 @@ export function ContactForm() {
                                             <Phone className="w-5 h-5 text-brand-green group-hover:text-white transition-colors" />
                                         </div>
                                         <div>
-                                            <p className="text-sm text-brand-green/50 uppercase tracking-wide mb-1">Phone</p>
+                                            <p className="text-sm text-brand-green/50 uppercase tracking-wide mb-1">Whatsapp</p>
                                             <span className="text-brand-green font-medium">+91 9649154803, 7073425362</span>
                                         </div>
                                     </motion.div>
@@ -194,7 +194,7 @@ export function ContactForm() {
 
                             {/* Partner Types */}
                             <motion.div
-                                className="bg-gradient-to-br from-brand-green to-brand-green/90 rounded-3xl p-8 text-white"
+                                className="bg-gradient-to-br from-brand-green to-brand-green/90 rounded-3xl p-5 ss:p-8 text-white"
                                 whileHover={{ scale: 1.02 }}
                                 transition={{ type: 'spring' as const, stiffness: 300, damping: 20 }}
                             >
@@ -215,7 +215,7 @@ export function ContactForm() {
                             className="lg:col-span-3"
                             variants={fadeInUp}
                         >
-                            <form action="https://formsubmit.co/visionforge.ventures@gmail.com" onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-brand-green/10" method='POST'>
+                            <form action="https://formsubmit.co/visionforge.ventures@gmail.com" onSubmit={handleSubmit} className="bg-white rounded-3xl p-5 ss:p-8 md:p-10 shadow-xl border border-brand-green/10" method='POST'>
                                 <h3 className="font-display text-2xl text-brand-green uppercase mb-8">Send Us a Message</h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -277,7 +277,7 @@ export function ContactForm() {
                                             value={formData.phone}
                                             onChange={handleChange}
                                             className="w-full px-4 py-3 rounded-xl border border-brand-green/20 focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 outline-none transition-all bg-brand-peach/10"
-                                            placeholder="+91 9649154803"
+                                            placeholder="+91 XXXXXXXXXX"
                                         />
                                     </motion.div>
                                 </div>

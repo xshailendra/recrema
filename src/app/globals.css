@@ -18,6 +18,9 @@
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Anton', 'Saira Stencil One', var(--font-anton), cursive;
+
+  --breakpoint-ss: 360px;
+  --breakpoint-xs: 480px;
 }
 
 body {

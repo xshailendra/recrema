@@ -54,11 +54,11 @@ export function ImpactSection() {
                             >
                                 Environmental Benchmark
                             </motion.span>
-                            <h1 className="text-7xl md:text-9xl font-display text-brand-green uppercase leading-[0.85] tracking-tighter mb-12">
+                            <h1 className="text-5xl ss:text-7xl md:text-9xl font-display text-brand-green uppercase leading-[0.85] tracking-tighter mb-12">
                                 Shared <br />
                                 <span className="text-brand-green/20 italic">Impact</span>
                             </h1>
-                            <p className="text-2xl text-brand-green/70 font-medium leading-tight max-w-xl">
+                            <p className="text-xl ss:text-2xl text-brand-green/70 font-medium leading-tight max-w-xl">
                                 Our impact is rooted in meaningful partnerships, responsible operations, and a vision aligned with India&apos;s sustainable future.
                             </p>
                         </div>
@@ -74,13 +74,16 @@ export function ImpactSection() {
                                     alt="Sustainable Future Vision"
                                     fill
                                     className="object-cover"
+                                    quality={100}
+                                    priority
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-green/40 to-transparent" />
                             </motion.div>
                             <motion.div
                                 animate={{ y: [0, -20, 0] }}
                                 transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                                className="absolute -bottom-10 -left-10 bg-white p-8 rounded-3xl shadow-xl flex items-center gap-6 border border-brand-green/5"
+                                className="absolute bottom-6 left-4 ss:-left-10 bg-white p-6 ss:p-8 rounded-3xl shadow-xl hidden lg:flex items-center gap-4 ss:gap-6 border border-brand-green/5 z-20"
                             >
                                 <div className="w-16 h-16 bg-brand-yellow rounded-2xl flex items-center justify-center">
                                     <Recycle className="w-8 h-8 text-brand-green" />
@@ -100,13 +103,13 @@ export function ImpactSection() {
             {/* 02. REGIONAL PARTNERSHIPS */}
             <section className="mb-64">
                 <Container>
-                    <div className="bg-white rounded-[4rem] p-12 md:p-24 shadow-xl border border-brand-green/5 relative overflow-hidden">
+                    <div className="bg-white rounded-[4rem] p-6 ss:p-12 md:p-24 shadow-xl border border-brand-green/5 relative overflow-hidden">
                         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 0)', backgroundSize: '40px 40px' }} />
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                             <div className="space-y-12">
                                 <div className="space-y-4">
                                     <span className="text-brand-peach font-bold uppercase tracking-widest text-xs italic">Community Scale</span>
-                                    <h2 className="text-5xl md:text-6xl font-display text-brand-green uppercase leading-none tracking-tighter">
+                                    <h2 className="text-4xl ss:text-5xl md:text-6xl font-display text-brand-green uppercase leading-none tracking-tighter">
                                         Growing Regional <br /> Partnerships
                                     </h2>
                                 </div>
@@ -114,11 +117,11 @@ export function ImpactSection() {
                                     We have collaborated with <strong>50+ cafés and 3+ major coffee chains</strong> across <strong>Jodhpur, Udaipur, and Ahmedabad</strong>, creating a reliable and efficient collection ecosystem.
                                 </p>
                                 <div className="grid grid-cols-2 gap-8">
-                                    <div className="p-8 bg-brand-peach/10 rounded-3xl border border-brand-peach/10">
+                                    <div className="p-4 ss:p-8 bg-brand-peach/10 rounded-3xl border border-brand-peach/10">
                                         <Counter value={50} suffix="+" />
                                         <span className="block text-[10px] font-bold uppercase tracking-widest text-brand-green/40 mt-2">Active Cafés</span>
                                     </div>
-                                    <div className="p-8 bg-brand-yellow/10 rounded-3xl border border-brand-yellow/10">
+                                    <div className="p-4 ss:p-8 bg-brand-yellow/10 rounded-3xl border border-brand-yellow/10">
                                         <Counter value={3} suffix="+" />
                                         <span className="block text-[10px] font-bold uppercase tracking-widest text-brand-green/40 mt-2">Major Chains</span>
                                     </div>
@@ -149,6 +152,8 @@ export function ImpactSection() {
                                     alt="Regional Collection Network"
                                     fill
                                     className="object-cover"
+                                    quality={90}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                             </div>
                         </div>
@@ -168,7 +173,7 @@ export function ImpactSection() {
                                 </h2>
                             </div>
                             <p className="text-xl text-brand-green/70 leading-relaxed">
-                                With a processing capability of <strong>100 kg/day</strong>, our facility is equipped to handle large volumes of SCGs while maintaining consistent quality.
+                                Starting strong with a pilot capacity of <strong>100 kg/day</strong>, our facility is equipped to handle large volumes of SCGs while maintaining consistent quality.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {[
@@ -192,10 +197,13 @@ export function ImpactSection() {
                                 className="relative aspect-video rounded-[3rem] overflow-hidden shadow-2xl border-8 border-white"
                             >
                                 <Image
-                                    src="/images/impact/facility.png"
+                                    src="/images/impact/facility-1.webp"
                                     alt="Industrial Scale Facility"
                                     fill
                                     className="object-cover"
+                                    quality={100}
+                                    priority
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                             </motion.div>
                             <div className="absolute -top-10 -right-10 bg-brand-green p-10 rounded-full shadow-2xl border-4 border-white">
@@ -210,14 +218,14 @@ export function ImpactSection() {
             {/* 04. NATIONAL ALIGNMENT */}
             <section className="mb-64">
                 <Container>
-                    <div className="bg-brand-green rounded-[4rem] p-12 md:p-32 text-white relative overflow-hidden">
+                    <div className="bg-brand-green rounded-[4rem] p-6 ss:p-12 md:p-32 text-white relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-96 h-96 bg-brand-yellow/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                         <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-peach/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
                         <div className="relative z-10 space-y-20">
                             <div className="max-w-3xl space-y-6">
                                 <span className="text-brand-yellow font-bold uppercase tracking-[0.4em] text-xs">National Mission</span>
-                                <h2 className="text-5xl md:text-7xl font-display uppercase leading-none tracking-tighter">
+                                <h2 className="text-4xl ss:text-5xl md:text-7xl font-display uppercase leading-none tracking-tighter">
                                     Aligned With <br /> <span className="text-brand-peach italic">Sustainability Goals</span>
                                 </h2>
                                 <p className="text-xl md:text-2xl text-white/70 font-medium">
@@ -235,7 +243,7 @@ export function ImpactSection() {
                                     <motion.div
                                         key={i}
                                         whileHover={{ y: -10 }}
-                                        className="bg-white/5 backdrop-blur-md border border-white/10 p-8 rounded-[2.5rem] space-y-6"
+                                        className="bg-white/5 backdrop-blur-md border border-white/10 p-5 ss:p-8 rounded-[2.5rem] space-y-6"
                                     >
                                         <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                                             <goal.icon className="w-6 h-6 text-brand-yellow" />
