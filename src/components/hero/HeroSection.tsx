@@ -184,7 +184,7 @@ export function HeroSection() {
                                 whileHover="hover"
                                 whileTap="tap"
                             >
-                                Discover Our Solutions
+                                Our Process
                             </motion.button>
                             <motion.button
                                 className="no-transition w-full sm:w-auto bg-brand-green text-white px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl"
