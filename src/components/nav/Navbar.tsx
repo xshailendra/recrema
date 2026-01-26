@@ -158,8 +158,8 @@ export function Navbar() {
                         href="/contact"
                         className="px-3 ss:px-6 py-2 ss:py-2.5 bg-white rounded-full text-brand-green text-sm font-bold shadow-sm hover:bg-white/90 transition-all border border-brand-green/5 whitespace-nowrap"
                     >
-                        <span className="ss:hidden text-[11px]">Partner With  us</span>
-                        <span className="hidden ss:inline">Partner With Us</span>
+                        <span className="ss:hidden text-[11px]">Contact us</span>
+                        <span className="hidden ss:inline">Contact us</span>
                     </Link>
                 </div>
             </div>
