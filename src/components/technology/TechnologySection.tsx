@@ -90,7 +90,7 @@ export function TechnologySection() {
                                     initial={{ scale: 1.1 }}
                                     whileInView={{ scale: 1 }}
                                     transition={{ duration: 1.5, ease: "easeOut" }}
-                                    src="/images/technology/innovation-heart.png"
+                                    src="/images/technology/innovation-1.webp"
                                     alt="Supercritical CO2 Extraction Heart"
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
