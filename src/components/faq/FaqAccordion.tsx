@@ -27,7 +27,7 @@ const FAQS = [
     {
         id: 4,
         question: 'Is your process environmentally friendly?',
-        answer: 'Absolutely! Our process as well as products are environment friendly & our circular model ensures zero waste goes to landfill. We propose to process 100kg of spent coffee grounds daily, slashing carbon emissions equivalent to driving an SUV for roughly 18 months straight. Our goal is to make coffee recycling accessible, efficient, and rewarding.',
+        answer: 'Absolutely! Our process as well as products are environment friendly & our circular model ensures zero waste goes to landfill.',
     },
     {
         id: 5,
