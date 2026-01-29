@@ -203,7 +203,7 @@ export function AboutSection() {
                     variants={staggerContainer}
                 >
                     <motion.h3
-                        className="text-2xl md:text-3xl font-display text-brand-green uppercase mb-8"
+                        className="text-4xl md:text-3xl font-display text-brand-green uppercase mb-8"
                         variants={fadeInUp}
                     >
                         Who We Are
