@@ -294,7 +294,7 @@ export function ContactForm() {
                                         className="w-full px-4 py-3 rounded-xl border border-brand-green/20 focus:border-brand-green focus:ring-2 focus:ring-brand-green/20 outline-none transition-all bg-brand-peach/10 text-brand-green"
                                     >
                                         <option value="">Select partnership type</option>
-                                        <option value="cafe">Café / Coffee Shop</option>
+                                        <option value="cafe">Café / Coffee Chains</option>
                                         <option value="restaurant">Restaurant Chain</option>
                                         <option value="hotel">Hotel / Resort</option>
                                         <option value="corporate">Corporate Office</option>
