@@ -5,7 +5,7 @@ import { Container } from '../ui/core';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
-const hashtags = ['#ZeroWaste', '#CircularEconomy', '#Sustainability', '#EcoIngredients', '#CoffeeWaste'];
+const hashtags = ['#CircularEconomy', '#Sustainability', '#EcoIngredients'];
 
 // Animation variants
 const containerVariants = {
