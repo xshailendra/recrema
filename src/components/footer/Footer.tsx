@@ -92,7 +92,7 @@ export function Footer() {
                         <ul className="space-y-3">
                             {[
                                 { name: 'Coffee Oil', slug: 'coffee-oil' },
-                                { name: 'Caffeine Extract', slug: 'caffeine-extract' },
+                                { name: 'Caffeine Extract', slug: 'caffeine-anhydrous' },
                                 { name: 'Natural Antioxidants', slug: 'antioxidants' },
                                 { name: 'Organic Fertilizer', slug: 'organic-fertilizer' }
                             ].map((item) => (
