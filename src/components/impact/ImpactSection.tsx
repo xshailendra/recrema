@@ -108,7 +108,7 @@ export function ImpactSection() {
                         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
                             <div className="space-y-12">
                                 <div className="space-y-4">
-                                    <span className="text-brand-peach font-bold uppercase tracking-widest text-xs italic">Community Scale</span>
+                                    <span className="text-brand-yellow font-bold uppercase tracking-widest text-xs italic">Community Scale</span>
                                     <h2 className="text-4xl ss:text-5xl md:text-6xl font-display text-brand-green uppercase leading-none tracking-tighter">
                                         Growing Regional <br /> Partnerships
                                     </h2>
