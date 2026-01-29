@@ -159,7 +159,7 @@ export function ContactForm() {
                                         <div>
                                             <p className="text-sm text-brand-green/50 uppercase tracking-wide mb-1">Email</p>
                                             <a href="mailto:visionforge.ventures@gmail.com" className="text-brand-green font-medium hover:underline">
-                                                visionforge.ventures@gmail.com
+                                                support@recrema.in
                                             </a>
                                         </div>
                                     </motion.div>
