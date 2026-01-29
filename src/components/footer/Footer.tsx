@@ -120,7 +120,7 @@ export function Footer() {
                                 <div>
                                     <p className="text-xs text-brand-green/50 mb-0.5 uppercase tracking-wide">Email</p>
                                     <a href="mailto:visionforge.ventures@gmail.com" className="text-brand-green/80 hover:text-brand-green transition-colors font-medium text-sm">
-                                        visionforge.ventures@gmail.com
+                                        support@recrema.in
                                     </a>
                                 </div>
                             </li>
