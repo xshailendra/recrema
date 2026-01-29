@@ -84,7 +84,7 @@ export function ExtractsSection() {
                         className="flex flex-col items-center gap-8"
                     >
                         <p className="text-xl ss:text-2xl md:text-3xl text-brand-green/80 font-medium leading-tight max-w-3xl">
-                            Transforming nature&apos;s leftovers into high-purity, bio-active ingredients.
+                            Transforming waste coffee into high-purity, bio-active ingredients.
                         </p>
                         <motion.div
                             animate={{ y: [0, 10, 0] }}
