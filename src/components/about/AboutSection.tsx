@@ -276,7 +276,7 @@ export function AboutSection() {
                     variants={staggerContainer}
                 >
                     <motion.h3
-                        className="text-2xl md:text-3xl font-display text-brand-green uppercase mb-8"
+                        className="text-2xl md:text-5xl font-display text-brand-green uppercase mb-8"
                         variants={fadeInUp}
                     >
                         What We Do
@@ -321,7 +321,7 @@ export function AboutSection() {
                     variants={staggerContainer}
                 >
                     <motion.h3
-                        className="text-2xl md:text-3xl font-display text-brand-green uppercase mb-8"
+                        className="text-2xl md:text-5xl font-display text-brand-green uppercase mb-8"
                         variants={fadeInUp}
                     >
                         How We Do It
@@ -376,7 +376,7 @@ export function AboutSection() {
                     variants={staggerContainer}
                 >
                     <motion.h3
-                        className="text-2xl md:text-3xl font-display text-brand-green uppercase mb-8 text-center"
+                        className="text-2xl md:text-5xl font-display text-brand-green uppercase mb-8 text-center"
                         variants={fadeInUp}
                     >
                         The Visionaries
