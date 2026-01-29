@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 
 import { Container } from '../ui/core';
 import { motion } from 'framer-motion';
@@ -175,28 +176,33 @@ export function HeroSection() {
 
                         </motion.div>
 
-                        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <motion.button
-                                className="no-transition w-full sm:w-auto bg-white text-brand-green px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl border border-brand-green/10"
-                                variants={buttonVariants}
-                                initial="hidden"
-                                animate="visible"
-                                whileHover="hover"
-                                whileTap="tap"
-                            >
-                                Our Process
-                            </motion.button>
-                            <motion.button
-                                className="no-transition w-full sm:w-auto bg-brand-green text-white px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl"
-                                variants={buttonVariants}
-                                initial="hidden"
-                                animate="visible"
-                                whileHover="hover"
-                                whileTap="tap"
-                            >
-                                Partner With Us
-                            </motion.button>
-                        </div>
+                    <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+    <Link href="/technology" passHref legacyBehavior>
+        <motion.button
+            className="no-transition w-full sm:w-auto bg-white text-brand-green px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl border border-brand-green/10"
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            whileTap="tap"
+        >
+            Our Process
+        </motion.button>
+    </Link>
+
+    <Link href="/contact" passHref legacyBehavior>
+        <motion.button
+            className="no-transition w-full sm:w-auto bg-brand-green text-white px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl"
+            variants={buttonVariants}
+            initial="hidden"
+            animate="visible"
+            whileHover="hover"
+            whileTap="tap"
+        >
+            Partner With Us
+        </motion.button>
+    </Link>
+</div>
                     </div>
                 </motion.div>
             </Container>
