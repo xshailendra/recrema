@@ -47,7 +47,7 @@ export function Footer() {
                     {/* Section 1: Brand Info */}
                     <motion.div className="space-y-5" variants={itemVariants}>
                         <Link href="/">
-                            <Image src="/images/logo-3.png" alt="Recrema Logo" width={180} height={80} className="h-20 md:h-24 w-auto object-contain" />
+                            <Image src="/images/logo-3.png" alt="Recrema Logo" width={260} height={120} className="h-20 md:h-24 w-auto object-contain" />
                         </Link>
                         <p className="text-brand-green/75 leading-relaxed font-medium text-sm">
                             Recrema transforms coffee waste into high-value eco-ingredients, pioneering India&apos;s transition to a circular economy.
