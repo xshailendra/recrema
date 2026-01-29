@@ -46,7 +46,7 @@ export function ContactForm() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch("https://formsubmit.co/ajax/visionforge.ventures@gmail.com", {
+            const response = await fetch("https://formsubmit.co/ajax/support@recrema.in", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -158,7 +158,7 @@ export function ContactForm() {
                                         </div>
                                         <div>
                                             <p className="text-sm text-brand-green/50 uppercase tracking-wide mb-1">Email</p>
-                                            <a href="mailto:visionforge.ventures@gmail.com" className="text-brand-green font-medium hover:underline">
+                                            <a href="mailto:support@recrema.in" className="text-brand-green font-medium hover:underline">
                                                 support@recrema.in
                                             </a>
                                         </div>
@@ -215,7 +215,7 @@ export function ContactForm() {
                             className="lg:col-span-3"
                             variants={fadeInUp}
                         >
-                            <form action="https://formsubmit.co/visionforge.ventures@gmail.com" onSubmit={handleSubmit} className="bg-white rounded-3xl p-5 ss:p-8 md:p-10 shadow-xl border border-brand-green/10" method='POST'>
+                            <form action="https://formsubmit.co/support@recrema.in" onSubmit={handleSubmit} className="bg-white rounded-3xl p-5 ss:p-8 md:p-10 shadow-xl border border-brand-green/10" method='POST'>
                                 <h3 className="font-display text-2xl text-brand-green uppercase mb-8">Send Us a Message</h3>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
