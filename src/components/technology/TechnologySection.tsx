@@ -95,8 +95,13 @@ export function TechnologySection() {
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-brand-green/20 via-transparent to-transparent" />
-                                <div className="absolute top-8 left-8 p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-brand-green/5 shadow-lg">
-                                    <Zap className="w-8 h-8 text-brand-yellow" />
+                                <div className="absolute top-8 left-8 p-4 bg-white/80 backdrop-blur-md rounded-2xl border border-brand-green/5 shadow-lg group/zap cursor-pointer overflow-hidden">
+                                    <div className="relative w-8 h-8">
+                                        {/* Background fill animation */}
+                                        <div className="absolute inset-0 bg-brand-yellow rounded-lg origin-bottom scale-y-0 group-hover/zap:scale-y-100 transition-transform duration-500 ease-out" />
+                                        {/* Zap icon */}
+                                        <Zap className="relative w-8 h-8 text-brand-yellow group-hover/zap:text-brand-green transition-colors duration-300 z-10" />
+                                    </div>
                                 </div>
                             </div>
                         </div>

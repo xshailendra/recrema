@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { Container, Button } from '../ui/core';
 import { motion } from 'framer-motion';
 import { Heart, Lightbulb, Users, Eye, Truck, Sparkles, Package, Leaf, Zap, Globe } from 'lucide-react';
@@ -443,7 +444,9 @@ export function AboutSection() {
                                 size="lg"
                                 className="bg-brand-yellow text-brand-green hover:bg-white font-bold"
                             >
-                                Partner With Us
+                                <Link href="/contact">
+                                    Partner With Us
+                                </Link>
                             </Button>
                         </div>
                     </motion.div>

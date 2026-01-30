@@ -244,9 +244,11 @@ function GalleryItem({ market, size }: GalleryItemProps) {
                             className="flex justify-between items-start"
                         >
                             <span className="text-brand-green/10 text-[12vw] xs:text-[15vw] ss:text-[6rem] md:text-[8rem] font-display leading-[0.6] -ml-4">0{market.id}</span>
-                            <div className="w-20 h-20 rounded-full border border-brand-green/10 flex items-center justify-center group-hover:bg-brand-green group-hover:text-white transition-all duration-500">
-                                <MoveRight className="w-8 h-8" />
-                            </div>
+                            <Link href="/contact" className="pointer-events-auto">
+                                <div className="w-20 h-20 rounded-full border border-brand-green/10 flex items-center justify-center bg-brand-green text-white hover:bg-brand-yellow hover:text-brand-green transition-all duration-500 cursor-pointer">
+                                    <MoveRight className="w-8 h-8" />
+                                </div>
+                            </Link>
                         </motion.div>
                         <div className="space-y-4">
                             <h3 className="text-4xl md:text-5xl font-display text-brand-green uppercase leading-none tracking-tighter">{market.name}</h3>

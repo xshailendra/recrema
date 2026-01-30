@@ -177,9 +177,9 @@ export function HeroSection() {
                         </motion.div>
 
                     <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-    <Link href="/technology" passHref legacyBehavior>
-        <motion.button
-            className="no-transition w-full sm:w-auto bg-white text-brand-green px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl border border-brand-green/10"
+    <Link href="/technology">
+        <motion.span
+            className="no-transition inline-block w-full sm:w-auto bg-white text-brand-green px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl border border-brand-green/10 text-center cursor-pointer"
             variants={buttonVariants}
             initial="hidden"
             animate="visible"
@@ -187,12 +187,12 @@ export function HeroSection() {
             whileTap="tap"
         >
             Our Process
-        </motion.button>
+        </motion.span>
     </Link>
 
-    <Link href="/contact" passHref legacyBehavior>
-        <motion.button
-            className="no-transition w-full sm:w-auto bg-brand-green text-white px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl"
+    <Link href="/contact">
+        <motion.span
+            className="no-transition inline-block w-full sm:w-auto bg-brand-green text-white px-8 lg:px-10 py-4 lg:py-3.5 rounded-full text-base font-bold shadow-xl text-center cursor-pointer"
             variants={buttonVariants}
             initial="hidden"
             animate="visible"
@@ -200,8 +200,9 @@ export function HeroSection() {
             whileTap="tap"
         >
             Partner With Us
-        </motion.button>
+        </motion.span>
     </Link>
+
 </div>
                     </div>
                 </motion.div>
