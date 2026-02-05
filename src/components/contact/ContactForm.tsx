@@ -200,7 +200,7 @@ export function ContactForm() {
                             >
                                 <h3 className="font-display text-xl uppercase mb-4">We Partner With</h3>
                                 <ul className="space-y-3">
-                                    {['Cafés & Coffee Shops', 'Restaurant Chains', 'Hotels & Resorts', 'Corporate Offices', 'Home Coffee Enthusiasts'].map((item) => (
+                                    {['Cafés & Coffee Chains', 'Restaurant Chains', 'Hotels & Resorts', 'Corporate Offices', 'Home Coffee Enthusiasts'].map((item) => (
                                         <li key={item} className="flex items-center gap-3">
                                             <div className="w-2 h-2 rounded-full bg-brand-yellow" />
                                             <span className="text-white/90">{item}</span>
