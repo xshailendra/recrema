@@ -119,7 +119,7 @@ export function Footer() {
                                 </div>
                                 <div>
                                     <p className="text-xs text-brand-green/50 mb-0.5 uppercase tracking-wide">Email</p>
-                                    <a href="mailto:visionforge.ventures@gmail.com" className="text-brand-green/80 hover:text-brand-green transition-colors font-medium text-sm">
+                                    <a href="mailto:support@recrema.in" className="text-brand-green/80 hover:text-brand-green transition-colors font-medium text-sm">
                                         support@recrema.in
                                     </a>
                                 </div>
@@ -156,15 +156,8 @@ export function Footer() {
                     viewport={{ once: true, amount: 0.5 }}
                     transition={{ type: 'spring', stiffness: 70, damping: 15, delay: 0.4 }}
                 >
-                    <p className="text-brand-green/60">©️ 2026 Recrema.com. All rights reserved. Property of VisionForge Ventures Pvt. Ltd.</p>
-                    <div className="flex flex-col ss:flex-row items-center gap-2 ss:gap-6 md:gap-8 text-center ss:text-left">
-                        <span className="text-brand-green/60">
-                            Designed and created by{' '}
-                            <Link href="https://shailendra-soni-portfolio.vercel.app" className="hover:text-brand-green transition-colors font-semibold">
-                                Shailendra Soni
-                            </Link>
-                        </span>
-                    </div>
+                    <p className="text-brand-green/60">©️ 2026 Recrema.in. All rights reserved. Property of VisionForge Ventures Pvt. Ltd.</p>
+                
                 </motion.div>
             </Container>
         </footer>
