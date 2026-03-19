@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://recrema.in
+Sitemap: https://www.recrema.in/sitemap.xml
