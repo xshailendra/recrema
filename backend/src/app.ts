@@ -15,10 +15,26 @@ const app = express();
 // 1. Security Middleware
 app.use(helmet());
 
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+const allowedOrigins = new Set(
+  (process.env.CLIENT_URLS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+);
+
+if (process.env.NODE_ENV !== 'production') {
+  allowedOrigins.add('http://localhost:3000');
+}
+
 app.use(
   cors({
-    origin: clientUrl,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
+    },
     credentials: true,
   })
 );
