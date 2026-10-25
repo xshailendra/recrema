@@ -156,7 +156,20 @@ export function Footer() {
                     viewport={{ once: true, amount: 0.5 }}
                     transition={{ type: 'spring', stiffness: 70, damping: 15, delay: 0.4 }}
                 >
-                    <p className="text-brand-green/60">©️ 2026 Recrema.in. All rights reserved. Property of VisionForge Ventures Pvt. Ltd.</p>
+                    <div className="flex flex-col items-center gap-2 md:items-start">
+                        <p className="text-brand-green/60">©️ 2026 Recrema.in. All rights reserved. Property of VisionForge Ventures Pvt. Ltd.</p>
+                        <p className="text-brand-green/60">
+                            Designed and Developed by{' '}
+                            <a
+                                href="https://www.shailendrasoni.in/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-brand-green hover:underline"
+                            >
+                                Shailendra Soni
+                            </a>
+                        </p>
+                    </div>
                 
                 </motion.div>
             </Container>
