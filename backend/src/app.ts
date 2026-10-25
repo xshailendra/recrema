@@ -1,4 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -7,6 +8,7 @@ import authRoutes from './routes/auth.routes';
 import wasteRoutes from './routes/waste.routes';
 import adminRoutes from './routes/admin.routes';
 import insightsRoutes from './routes/insights.routes';
+import { sendError, sendSuccess } from './utils/apiResponse';
 
 const app = express();
 
@@ -43,8 +45,6 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
-import mongoose from 'mongoose';
-
 // 4. Routes
 // Health Check Endpoint
 app.get('/health', (req: Request, res: Response) => {
@@ -54,6 +54,20 @@ app.get('/health', (req: Request, res: Response) => {
     success: isDbConnected,
     message: 'Recrema API is running',
     database: isDbConnected ? 'connected' : 'disconnected',
+  });
+});
+
+app.get('/api/v1/health', (_req: Request, res: Response) => {
+  const isDbConnected = mongoose.connection.readyState === 1;
+  if (!isDbConnected) {
+    return sendError(res, 'SERVICE_UNAVAILABLE', 'Database connection unavailable', 503);
+  }
+
+  return sendSuccess(res, {
+    status: 'healthy',
+    api: 'up',
+    database: 'connected',
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
