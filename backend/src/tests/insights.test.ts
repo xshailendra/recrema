@@ -128,6 +128,33 @@ const testInsights = async () => {
       console.log('✅ J. Contributors are correctly aggregated');
     } else throw new Error(`Contributors aggregation failed: ${JSON.stringify(res.data.data)}`);
 
+    // Deactivated partner history remains stored but is excluded from public impact.
+    await User.updateOne({ _id: clientA }, { $set: { isActive: false } });
+    res = await fetchInsights();
+    if (
+      res.status === 200 &&
+      res.data.data.totalWasteKg === baseAll.totalWasteKg + 30 &&
+      res.data.data.contributingClients === baseAll.contributingClients + 1 &&
+      res.data.data.approvedEntries === baseAll.approvedEntries + 1
+    ) {
+      console.log('✅ Deactivated partner history is excluded from public summary');
+    } else throw new Error(`Inactive partner summary failed: ${JSON.stringify(res.data.data)}`);
+
+    res = await fetchInsights('/trends?period=monthly');
+    const inactiveMayTrend = res.data.data.find((t: any) => t.period === '2026-05')?.totalWasteKg || 0;
+    const inactiveSeptTrend = res.data.data.find((t: any) => t.period === '2026-09')?.totalWasteKg || 0;
+    if (inactiveMayTrend === getBaseMonthTrend('2026-05') && inactiveSeptTrend === getBaseMonthTrend('2026-09')) {
+      console.log('✅ Deactivated partner history is excluded from monthly trends');
+    } else throw new Error(`Inactive partner trend failed: ${JSON.stringify(res.data.data)}`);
+
+    res = await fetchInsights('/contributors');
+    if (!res.data.data.some((contributor: any) => contributor.clientName === 'Client A Test')) {
+      console.log('✅ Deactivated partners are excluded from contributor rankings');
+    } else throw new Error('Inactive partner remained in contributor rankings');
+    if ((await CoffeeWasteEntry.countDocuments({ clientId: clientA, status: 'approved' })) !== 2) {
+      throw new Error('Deactivation unexpectedly removed historical waste records');
+    }
+
     // --- M. Invalid query parameters are rejected
     res = await fetchInsights('?year=1900');
     if (res.status === 400) {

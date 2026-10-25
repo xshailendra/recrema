@@ -9,6 +9,24 @@ interface InsightsFilters {
 }
 
 export class InsightsService {
+  // Keep approved history in storage, but public impact only includes active partners.
+  private static activePartnerStages(): PipelineStage[] {
+    return [
+      {
+        $lookup: {
+          from: 'users',
+          let: { partnerId: '$clientId' },
+          pipeline: [
+            { $match: { $expr: { $and: [{ $eq: ['$_id', '$$partnerId'] }, { $eq: ['$isActive', true] }, { $eq: ['$role', 'client'] }] } } },
+            { $project: { _id: 1, name: 1 } },
+          ],
+          as: 'activePartner',
+        },
+      },
+      { $match: { 'activePartner.0': { $exists: true } } },
+    ];
+  }
+
   static buildDateMatch(filters: InsightsFilters) {
     const matchQuery: any = { status: 'approved' };
     
@@ -53,6 +71,7 @@ export class InsightsService {
 
     const pipeline: PipelineStage[] = [
       { $match: match },
+      ...this.activePartnerStages(),
       {
         $group: {
           _id: null,
@@ -89,6 +108,7 @@ export class InsightsService {
 
     const pipeline: PipelineStage[] = [
       { $match: { status: 'approved' } },
+      ...this.activePartnerStages(),
       {
         $group: {
           _id: { $dateToString: { format, date: '$wasteDate' } },
@@ -111,6 +131,7 @@ export class InsightsService {
   static async getContributors(limit: number) {
     const pipeline: PipelineStage[] = [
       { $match: { status: 'approved' } },
+      ...this.activePartnerStages(),
       {
         $group: {
           _id: '$clientId',
@@ -119,22 +140,12 @@ export class InsightsService {
       },
       { $sort: { totalWasteKg: -1 } },
       { $limit: limit },
-      {
-        $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'clientDetails',
-        },
-      },
-      {
-        $unwind: '$clientDetails',
-      },
+      { $unwind: '$activePartner' },
       {
         $project: {
           _id: 0,
           clientId: '$_id',
-          clientName: '$clientDetails.name',
+          clientName: '$activePartner.name',
           totalWasteKg: 1,
         },
       },

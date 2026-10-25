@@ -22,6 +22,7 @@ export const metadata: Metadata = {
 };
 
 import { ExitIntentModal } from "@/components/ui/ExitIntentModal";
+import { AuthProvider } from "@/context/AuthProvider";
 
 export default function RootLayout({
   children,
@@ -31,8 +32,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${anton.variable} antialiased`} suppressHydrationWarning>
-        {children}
-        <ExitIntentModal />
+        <AuthProvider>
+          {children}
+          <ExitIntentModal />
+        </AuthProvider>
       </body>
     </html>
   );

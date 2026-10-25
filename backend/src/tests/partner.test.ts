@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import mongoose, { Types } from 'mongoose';
 import { AuditLog } from '../models/AuditLog';
 import { User } from '../models/User';
+import { CoffeeWasteEntry } from '../models/CoffeeWasteEntry';
 import { connectDatabase } from '../config/database';
 
 const BASE_URL = 'http://localhost:5001/api/v1';
@@ -56,6 +57,9 @@ const run = async () => {
     const client = await login(process.env.SEED_CLIENT1_EMAIL ?? '', process.env.SEED_CLIENT1_PASSWORD ?? '');
     assert.equal((await request('/admin/partners', 'GET')).response.status, 401);
     assert.equal((await request('/admin/partners', 'GET', client.cookie)).response.status, 403);
+    assert.equal((await request('/admin/partners', 'POST', client.cookie, {
+      name: 'Forbidden', email: `forbidden-${unique}@recrema.test`, clientCode: `NO-${unique}`, password: partnerPassword,
+    })).response.status, 403);
 
     let result = await request('/admin/partners', 'POST', admin.cookie, {
       name: 'Integration Partner',
@@ -97,6 +101,19 @@ const run = async () => {
     result = await request(`/admin/partners/${partnerId}`, 'GET', admin.cookie);
     assert.equal(result.response.status, 200);
     assert.equal(asObject(result.data.data).email, partnerEmail);
+    assert.equal('passwordHash' in asObject(result.data.data), false);
+
+    result = await request(`/admin/partners/${partnerId}`, 'PATCH', admin.cookie, {
+      name: 'Updated Integration Partner', email: `updated-${unique}@recrema.test`, clientCode: `UPDATED-${unique}`,
+    });
+    assert.equal(result.response.status, 200);
+    assert.equal(asObject(result.data.data).name, 'Updated Integration Partner');
+    assert.equal(asObject(result.data.data).clientCode, `UPDATED-${unique}`);
+    assert.equal('passwordHash' in asObject(result.data.data), false);
+    const editedEmail = `updated-${unique}@recrema.test`;
+    assert.equal((await login(editedEmail, partnerPassword)).response.status, 200);
+    assert.equal((await request(`/admin/partners/${partnerId}`, 'PATCH', admin.cookie, { role: 'admin' })).response.status, 400);
+    assert.equal((await request('/admin/partners/invalid-id', 'PATCH', admin.cookie, { name: 'Bad ID' })).response.status, 400);
 
     assert.equal((await request('/admin/partners/invalid-id', 'GET', admin.cookie)).response.status, 400);
     assert.equal((await request(`/admin/partners/${new Types.ObjectId()}`, 'GET', admin.cookie)).response.status, 404);
@@ -106,18 +123,40 @@ const run = async () => {
     result = await request(`/admin/partners/${partnerId}/status`, 'PATCH', admin.cookie, { isActive: false });
     assert.equal(result.response.status, 200);
     assert.equal(asObject(result.data.data).isActive, false);
-    assert.equal((await login(partnerEmail, partnerPassword)).response.status, 401);
+    assert.equal((await login(editedEmail, partnerPassword)).response.status, 401);
 
     result = await request(`/admin/partners/${partnerId}/status`, 'PATCH', admin.cookie, { isActive: true });
     assert.equal(result.response.status, 200);
-    assert.equal((await login(partnerEmail, partnerPassword)).response.status, 200);
+    assert.equal((await login(editedEmail, partnerPassword)).response.status, 200);
 
     const newPassword = 'new-temporary-password';
     result = await request(`/admin/partners/${partnerId}/reset-password`, 'PATCH', admin.cookie, { password: newPassword });
     assert.equal(result.response.status, 200);
     assert.equal('password' in result.data, false);
-    assert.equal((await login(partnerEmail, partnerPassword)).response.status, 401);
-    assert.equal((await login(partnerEmail, newPassword)).response.status, 200);
+    assert.equal((await login(editedEmail, partnerPassword)).response.status, 401);
+    assert.equal((await login(editedEmail, newPassword)).response.status, 200);
+
+    result = await request(`/admin/partners/${partnerId}`, 'PATCH', admin.cookie, { password: 'edited-password' });
+    assert.equal(result.response.status, 200);
+    assert.equal('passwordHash' in asObject(result.data.data), false);
+    assert.equal((await login(editedEmail, newPassword)).response.status, 401);
+    assert.equal((await login(editedEmail, 'edited-password')).response.status, 200);
+
+    const historicalEntry = await CoffeeWasteEntry.create({
+      clientId: new Types.ObjectId(partnerId), quantityKg: 3, wasteDate: new Date('2026-10-01'), status: 'approved',
+    });
+    result = await request(`/admin/partners/${partnerId}`, 'DELETE', admin.cookie);
+    assert.equal(result.response.status, 200);
+    assert.equal(asObject(result.data.data).isActive, false);
+    assert.equal('passwordHash' in asObject(result.data.data), false);
+    assert.ok(await CoffeeWasteEntry.findById(historicalEntry._id));
+    assert.equal((await login(editedEmail, 'edited-password')).response.status, 401);
+    assert.equal((await request(`/admin/partners/${partnerId}`, 'DELETE', admin.cookie)).response.status, 200);
+    const adminProfile = await request('/auth/me', 'GET', admin.cookie);
+    const adminUser = asObject(asObject(adminProfile.data.data).user);
+    assert.equal((await request(`/admin/partners/${String(adminUser._id)}`, 'DELETE', admin.cookie)).response.status, 403);
+    assert.equal((await request(`/admin/partners/${partnerId}`, 'DELETE', client.cookie)).response.status, 403);
+    assert.equal((await request('/admin/partners/invalid-id', 'DELETE', admin.cookie)).response.status, 400);
 
     result = await request('/admin/partners', 'POST', admin.cookie, {
       name: 'Role Escalation',
@@ -130,12 +169,14 @@ const run = async () => {
 
     const logs = await AuditLog.find({
       entityId: new Types.ObjectId(partnerId),
-      action: { $in: ['CREATE_PARTNER', 'ACTIVATE_PARTNER', 'DEACTIVATE_PARTNER', 'RESET_PARTNER_PASSWORD'] },
+      action: { $in: ['CREATE_PARTNER', 'ACTIVATE_PARTNER', 'DEACTIVATE_PARTNER', 'RESET_PARTNER_PASSWORD', 'UPDATE_PARTNER', 'REMOVE_PARTNER'] },
     }).lean();
     assert.ok(logs.some((log) => log.action === 'CREATE_PARTNER'));
     assert.ok(logs.some((log) => log.action === 'ACTIVATE_PARTNER'));
     assert.ok(logs.some((log) => log.action === 'DEACTIVATE_PARTNER'));
     assert.ok(logs.some((log) => log.action === 'RESET_PARTNER_PASSWORD'));
+    assert.ok(logs.some((log) => log.action === 'UPDATE_PARTNER'));
+    assert.ok(logs.some((log) => log.action === 'REMOVE_PARTNER'));
     assert.equal(logs.some((log) => JSON.stringify(log).includes(partnerPassword)), false);
     assert.equal(logs.some((log) => JSON.stringify(log).includes(newPassword)), false);
 
@@ -143,6 +184,7 @@ const run = async () => {
   } finally {
     if (partnerId) {
       await AuditLog.deleteMany({ entityId: new Types.ObjectId(partnerId) });
+      await CoffeeWasteEntry.deleteMany({ clientId: new Types.ObjectId(partnerId) });
       await User.deleteOne({ _id: new Types.ObjectId(partnerId) });
     }
     await User.deleteMany({ email: { $in: [`duplicate-${unique}@recrema.test`, `role-${unique}@recrema.test`] } });

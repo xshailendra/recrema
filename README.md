@@ -1,34 +1,32 @@
-# Recrema - Sustainably Beautiful 🌿
+# Recrema
 
-**Recrema** is a circular economy solution dedicated to upcycling spent coffee grounds into high-value components for cosmetics, pharmaceuticals, and more.
+Recrema is a circular economy solution that upcycles spent coffee grounds into ingredients for cosmetics, pharmaceuticals, and other applications.
 
-## Overview
+The repository contains two independent applications:
 
-We are a highly conscious team dedicated to reducing waste. Our mission is to make coffee recycling accessible, efficient, and rewarding by transforming waste into valuable resources.
+```text
+frontend/  Next.js web application
+backend/   Express and TypeScript API
+```
 
-## Key Features
-
-- **Circular Economy**: Initiating a zero-waste loop in the coffee industry.
-- **Innovative Upcycling**: Extracting cosmetic-grade oil, pharma-grade caffeine, and clean biofuels.
-- **Community Empowering**: Supporting local farmers and spreading sustainability awareness.
-
-## Getting Started
-
-First, run the development server:
+## Frontend
 
 ```bash
+cd frontend
+npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set `NEXT_PUBLIC_API_URL` in `frontend/.env.local` to the backend API base URL.
 
-## Tech Stack
+## Backend
 
-- **Framework**: Next.js 15
-- **Styling**: Tailwind CSS
-- **Animations**: Framer Motion
-- **Icons**: Lucide React
+```bash
+cd backend
+npm install
+npm run dev
+```
 
----
+Configure the backend environment in `backend/.env`. The backend reads variables including `CLIENT_URL`, `NODE_ENV`, `COOKIE_NAME`, `JWT_SECRET`, and `MONGODB_URI`.
 
-*Designed and Created for VisionForge Ventures*
+Build either application independently by running `npm run build` from its directory. The frontend and backend each have their own package manifest and lockfile.

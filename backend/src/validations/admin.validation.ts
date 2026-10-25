@@ -35,6 +35,15 @@ export const createPartnerSchema = z.object({
   }).strict(),
 });
 
+export const updatePartnerSchema = z.object({
+  body: z.object({
+    name: partnerFields.name.optional(),
+    email: partnerFields.email.optional(),
+    clientCode: partnerFields.clientCode.optional(),
+    password: passwordSchema.optional(),
+  }).strict().refine((value) => Object.keys(value).length > 0, 'At least one partner field is required'),
+});
+
 export const partnerQuerySchema = z.object({
   query: z.object({
     page: z.coerce.number().int().min(1).default(1),

@@ -12,6 +12,8 @@ const navLinks = [
     { name: 'Markets', href: '/markets' },
     { name: 'Technology', href: '/technology' },
     { name: 'Impact', href: '/impact' },
+    { name: 'Insights', href: '/insights' },
+    { name: 'Partner Portal', href: '/portal' },
 ];
 
 // Navbar animation variants

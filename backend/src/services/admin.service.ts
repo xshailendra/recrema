@@ -181,6 +181,55 @@ export class AdminService {
     return partner;
   }
 
+  static async updatePartner(
+    partnerId: string,
+    data: { name?: string; email?: string; clientCode?: string; password?: string },
+    adminId: string
+  ): Promise<IUser> {
+    const partner = await this.findPartner(partnerId);
+    if (!partner) throw new Error('NOT_FOUND');
+
+    const changes: string[] = [];
+    if (data.name !== undefined) { partner.name = data.name; changes.push('name'); }
+    if (data.email !== undefined) { partner.email = data.email.toLowerCase(); changes.push('email'); }
+    if (data.clientCode !== undefined) { partner.clientCode = data.clientCode; changes.push('clientCode'); }
+    if (data.password !== undefined) {
+      partner.passwordHash = await bcrypt.hash(data.password, 10);
+      changes.push('password');
+    }
+
+    try {
+      await partner.save();
+    } catch (error) {
+      if (this.isDuplicateKeyError(error)) {
+        throw new Error(this.duplicateKeyField(error) === 'email' ? 'DUPLICATE_EMAIL' : 'DUPLICATE_CLIENT_CODE');
+      }
+      throw error;
+    }
+
+    await AuditLog.create({
+      action: 'UPDATE_PARTNER', entityType: 'USER', entityId: partner._id,
+      performedBy: new Types.ObjectId(adminId), metadata: { changedFields: changes },
+    });
+    return partner;
+  }
+
+  static async removePartner(partnerId: string, adminId: string): Promise<IUser> {
+    if (!Types.ObjectId.isValid(partnerId)) throw new Error('INVALID_ID');
+    if (partnerId === adminId) throw new Error('CANNOT_DELETE_SELF');
+    const partner = await this.findPartner(partnerId);
+    if (!partner) throw new Error('NOT_FOUND');
+    if (!partner.isActive) return partner;
+
+    partner.isActive = false;
+    await partner.save();
+    await AuditLog.create({
+      action: 'REMOVE_PARTNER', entityType: 'USER', entityId: partner._id,
+      performedBy: new Types.ObjectId(adminId), metadata: { softDeleted: true },
+    });
+    return partner;
+  }
+
   static async updatePartnerStatus(partnerId: string, isActive: boolean, adminId: string): Promise<IUser> {
     const partner = await this.findPartner(partnerId);
     if (!partner) throw new Error('NOT_FOUND');

@@ -8,6 +8,7 @@ import {
   partnerStatusSchema,
   rejectWasteSchema,
   resetPartnerPasswordSchema,
+  updatePartnerSchema,
 } from '../validations/admin.validation';
 
 export const getPendingEntries = async (req: Request, res: Response) => {
@@ -135,6 +136,37 @@ export const getPartner = async (req: Request, res: Response) => {
     if (error instanceof Error && error.message === 'INVALID_ID') return sendError(res, 'VALIDATION_ERROR', 'Invalid partner ID format', 400);
     if (error instanceof Error && error.message === 'NOT_FOUND') return sendError(res, 'NOT_FOUND', 'Partner not found', 404);
     return sendError(res, 'INTERNAL_ERROR', 'Failed to retrieve partner', 500);
+  }
+};
+
+export const updatePartner = async (req: Request, res: Response) => {
+  try {
+    const parsed = updatePartnerSchema.safeParse(req);
+    if (!parsed.success) return sendError(res, 'VALIDATION_ERROR', 'Invalid partner payload', 400, parsed.error.issues);
+    const adminId = req.user?.userId;
+    if (!adminId) return sendError(res, 'UNAUTHORIZED', 'Admin ID not found', 401);
+    const partner = await AdminService.updatePartner(req.params.id, parsed.data.body, adminId);
+    return sendSuccess(res, partner);
+  } catch (error) {
+    if (error instanceof Error && error.message === 'INVALID_ID') return sendError(res, 'VALIDATION_ERROR', 'Invalid partner ID format', 400);
+    if (error instanceof Error && error.message === 'NOT_FOUND') return sendError(res, 'NOT_FOUND', 'Partner not found', 404);
+    if (error instanceof Error && error.message === 'DUPLICATE_EMAIL') return sendError(res, 'DUPLICATE_EMAIL', 'Email is already in use', 409);
+    if (error instanceof Error && error.message === 'DUPLICATE_CLIENT_CODE') return sendError(res, 'DUPLICATE_CLIENT_CODE', 'Client code is already in use', 409);
+    return sendError(res, 'INTERNAL_ERROR', 'Failed to update partner', 500);
+  }
+};
+
+export const removePartner = async (req: Request, res: Response) => {
+  try {
+    const adminId = req.user?.userId;
+    if (!adminId) return sendError(res, 'UNAUTHORIZED', 'Admin ID not found', 401);
+    const partner = await AdminService.removePartner(req.params.id, adminId);
+    return sendSuccess(res, partner);
+  } catch (error) {
+    if (error instanceof Error && error.message === 'INVALID_ID') return sendError(res, 'VALIDATION_ERROR', 'Invalid partner ID format', 400);
+    if (error instanceof Error && error.message === 'CANNOT_DELETE_SELF') return sendError(res, 'FORBIDDEN', 'You cannot remove your own admin account', 403);
+    if (error instanceof Error && error.message === 'NOT_FOUND') return sendError(res, 'NOT_FOUND', 'Partner not found', 404);
+    return sendError(res, 'INTERNAL_ERROR', 'Failed to remove partner', 500);
   }
 };
 

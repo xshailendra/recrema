@@ -9,6 +9,8 @@ import {
   getAllEntries,
   approveEntry,
   rejectEntry,
+  updatePartner,
+  removePartner,
 } from '../controllers/admin.controller';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 
@@ -25,7 +27,9 @@ router.patch('/waste/:id/reject', rejectEntry);
 router.post('/partners', createPartner);
 router.get('/partners', getPartners);
 router.get('/partners/:id', getPartner);
+router.patch('/partners/:id', updatePartner);
 router.patch('/partners/:id/status', updatePartnerStatus);
 router.patch('/partners/:id/reset-password', resetPartnerPassword);
+router.delete('/partners/:id', removePartner);
 
 export default router;
