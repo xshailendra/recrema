@@ -138,8 +138,8 @@ export function InsightsExperience() {
               </article>
               <MetricCard icon={Users} value={numberFormat.format(summary.contributingClients)} label="Contributing partners" detail="Partners with approved collections" />
               <MetricCard icon={Coffee} value={numberFormat.format(summary.approvedEntries)} label="Approved collections" detail="Verified collection records" />
-              <MetricCard icon={Leaf} value={emissionsFormat.format(summary.totalWasteKg * methaneFactor)} label="Methane Emissions Averted" detail="kg CH₄ · waste upcycled × 0.072" />
-              <MetricCard icon={Factory} value={emissionsFormat.format(summary.totalWasteKg * co2eFactor)} label="CO₂e Emissions Avoided" detail="kg CO₂e · waste upcycled × 2.016" />
+              <MetricCard icon={Leaf} value={emissionsFormat.format(summary.totalWasteKg * methaneFactor)} label="Methane Emissions Averted" detail="kg CH₄" />
+              <MetricCard icon={Factory} value={emissionsFormat.format(summary.totalWasteKg * co2eFactor)} label="CO₂e Emissions Avoided" detail="kg CO₂e" />
             </div>
           )}
         </Container>
@@ -224,7 +224,7 @@ export function InsightsExperience() {
                   </table>
                 </div>
               )}
-              <p className="mt-5 text-[11px] leading-5 text-brand-green/45">Emissions values are calculated from approved collection quantities using the displayed factors.</p>
+              <p className="mt-5 text-[11px] leading-5 text-brand-green/45">Emissions values are calculated from approved collection quantities using the factors approved by IPCC.</p>
             </div>
           </div>
         </Container>
