@@ -38,6 +38,16 @@ export class WasteService {
     };
   }
 
+  static async getClientApprovedSummary(clientId: string) {
+    const [result] = await CoffeeWasteEntry.aggregate([
+      { $match: { clientId: new Types.ObjectId(clientId), status: 'approved' } },
+      { $group: { _id: null, approvedKg: { $sum: '$quantityKg' }, approvedEntries: { $sum: 1 } } },
+      { $project: { _id: 0, approvedKg: 1, approvedEntries: 1 } },
+    ]);
+
+    return result ?? { approvedKg: 0, approvedEntries: 0 };
+  }
+
   static async getClientEntryById(clientId: string, entryId: string): Promise<ICoffeeWasteEntry | null> {
     if (!Types.ObjectId.isValid(entryId)) {
       return null;

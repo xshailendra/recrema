@@ -54,7 +54,22 @@ export const getMyWasteEntries = async (req: Request, res: Response) => {
   }
 };
 
-export const getMyWasteEntryById = async (req: Request, res: Response) => {
+export const getMyWasteSummary = async (req: Request, res: Response) => {
+  try {
+    const clientId = req.user?.userId;
+    if (!clientId) {
+      return sendError(res, 'UNAUTHORIZED', 'User ID not found', 401);
+    }
+
+    const summary = await WasteService.getClientApprovedSummary(clientId);
+
+    return sendSuccess(res, summary);
+  } catch (error) {
+    return sendError(res, 'INTERNAL_ERROR', 'Failed to retrieve waste summary', 500);
+  }
+};
+
+export const getMyWasteEntryById =async (req: Request, res: Response) => {
   try {
     const clientId = req.user?.userId;
     const entryId = req.params.id;

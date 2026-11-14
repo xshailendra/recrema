@@ -38,6 +38,13 @@ export type Partner = {
   createdAt: string;
 };
 
+export type AdminWasteFilters = {
+  status: "" | "pending" | "approved" | "rejected";
+  clientId: string;
+  startDate: string;
+  endDate: string;
+};
+
 export type WasteEntry = {
   _id: string;
   clientId: string | { _id: string; name: string; email: string; clientCode?: string };
@@ -138,10 +145,18 @@ export const api = {
   },
   myWasteEntries: (page = 1, limit = 20) =>
     requestPage<WasteEntry>(`/waste?page=${page}&limit=${limit}`),
+  myWasteSummary: async () =>
+    requireData(await request<{ approvedKg: number; approvedEntries: number }>("/waste/summary")),
   createWasteEntry: async (input: { quantityKg: number; wasteDate: string; notes?: string }) =>
     requireData(await request<WasteEntry>("/waste", { method: "POST", body: JSON.stringify(input) })),
-  pendingWasteEntries: (page = 1, limit = 20) =>
-    requestPage<WasteEntry>(`/admin/waste/pending?page=${page}&limit=${limit}`),
+  adminWasteEntries: (filters: AdminWasteFilters, page = 1, limit = 20) => {
+    const params = new URLSearchParams({ page: String(page), limit: String(limit) });
+    if (filters.status) params.set("status", filters.status);
+    if (filters.clientId) params.set("clientId", filters.clientId);
+    if (filters.startDate) params.set("startDate", filters.startDate);
+    if (filters.endDate) params.set("endDate", filters.endDate);
+    return requestPage<WasteEntry>(`/admin/waste?${params.toString()}`);
+  },
   partners: (page = 1, limit = 50, search = "") =>
     requestPage<Partner>(`/admin/partners?page=${page}&limit=${limit}&search=${encodeURIComponent(search)}`),
   createPartner: async (input: { name: string; email: string; clientCode: string; password: string }) =>

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createWasteEntry, getMyWasteEntries, getMyWasteEntryById } from '../controllers/waste.controller';
+import { createWasteEntry, getMyWasteEntries, getMyWasteEntryById, getMyWasteSummary } from '../controllers/waste.controller';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 
 const router = Router();
@@ -10,6 +10,7 @@ router.use(requireRole(['client']));
 
 router.post('/', createWasteEntry);
 router.get('/', getMyWasteEntries);
+router.get('/summary', getMyWasteSummary);
 router.get('/:id', getMyWasteEntryById);
 
 export default router;

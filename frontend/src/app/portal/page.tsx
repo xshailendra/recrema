@@ -3,7 +3,15 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError, api, type Paginated, type WasteEntry } from "@/lib/api";
+import { ApiError, api, type AdminWasteFilters, type Paginated, type Partner, type WasteEntry } from "@/lib/api";
+
+const defaultAdminFilters: AdminWasteFilters = { status: "pending", clientId: "", startDate: "", endDate: "" };
+const statusTitles: Record<AdminWasteFilters["status"], string> = {
+  pending: "Awaiting review",
+  approved: "Approved entries",
+  rejected: "Rejected entries",
+  "": "All entries",
+};
 import { useAuth } from "@/context/AuthProvider";
 import PartnerManagement from "@/components/portal/PartnerManagement";
 
@@ -16,6 +24,7 @@ export default function PortalPage() {
   const { user, loading: authLoading, refreshUser, logout } = useAuth();
   const [entries, setEntries] = useState<WasteEntry[]>([]);
   const [total, setTotal] = useState(0);
+  const [approvedKg, setApprovedKg] = useState<number | null>(null);
   const [loadingData, setLoadingData] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
@@ -24,16 +33,32 @@ export default function PortalPage() {
   const [notes, setNotes] = useState("");
   const [actionId, setActionId] = useState("");
   const [adminSection, setAdminSection] = useState<"pending" | "partners">("pending");
+  const [adminFilters, setAdminFilters] = useState<AdminWasteFilters>(defaultAdminFilters);
+  const [partnerOptions, setPartnerOptions] = useState<Partner[]>([]);
+
+  const filtersActive = adminFilters.status !== defaultAdminFilters.status || Boolean(adminFilters.clientId || adminFilters.startDate || adminFilters.endDate);
+
+  function updateAdminFilter<K extends keyof AdminWasteFilters>(key: K, value: AdminWasteFilters[K]) {
+    setAdminFilters((current) => ({ ...current, [key]: value }));
+  }
+
+  useEffect(() => {
+    if (user?.role !== "admin") return;
+    api.partners(1, 100)
+      .then((result) => setPartnerOptions([...result.data].sort((a, b) => a.name.localeCompare(b.name))))
+      .catch(() => setPartnerOptions([]));
+  }, [user]);
 
   const loadEntries = useCallback(async () => {
     if (!user) return;
     setLoadingData(true);
     setError("");
     try {
-      const result: Paginated<WasteEntry> = user.role === "admin"
-        ? await api.pendingWasteEntries()
-        : await api.myWasteEntries();
+      const [result, summary]: [Paginated<WasteEntry>, { approvedKg: number } | null] = user.role === "admin"
+        ? [await api.adminWasteEntries(adminFilters), null]
+        : await Promise.all([api.myWasteEntries(), api.myWasteSummary()]);
       const nextEntries = Array.isArray(result.data) ? result.data : [];
+      setApprovedKg(summary && Number.isFinite(summary.approvedKg) ? summary.approvedKg : null);
       setEntries(nextEntries);
       setTotal(Number.isFinite(result.pagination?.total) ? result.pagination.total : nextEntries.length);
     } catch (cause) {
@@ -46,7 +71,7 @@ export default function PortalPage() {
     } finally {
       setLoadingData(false);
     }
-  }, [user, refreshUser, router]);
+  }, [user, adminFilters, refreshUser, router]);
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/login");
@@ -147,10 +172,44 @@ export default function PortalPage() {
 
         {user.role === "admin" && adminSection === "partners" ? <PartnerManagement /> : <section className="overflow-hidden rounded-3xl bg-white shadow-sm">
           <div className="flex items-center justify-between border-b border-brand-green/10 px-6 py-5">
-            <div><h2 className="font-display text-2xl uppercase text-brand-green">{user.role === "admin" ? "Awaiting review" : "Your submissions"}</h2><p className="mt-1 text-sm text-brand-green/60">{total} {total === 1 ? "entry" : "entries"}</p></div>
+            <div><h2 className="font-display text-2xl uppercase text-brand-green">{user.role === "admin" ? statusTitles[adminFilters.status] : "Your submissions"}</h2><p className="mt-1 text-sm text-brand-green/60">{total} {total === 1 ? "entry" : "entries"}</p></div>
             <button onClick={() => void loadEntries()} disabled={loadingData} className="rounded-full border border-brand-green/20 px-4 py-2 text-sm font-semibold text-brand-green disabled:opacity-50">Refresh</button>
           </div>
-          {loadingData ? <p className="px-6 py-12 text-center text-brand-green/60">Loading entries…</p> : entries.length === 0 ? <p className="px-6 py-12 text-center text-brand-green/60">No submissions yet.</p> : (
+          {user.role === "admin" && (
+            <div className="grid grid-cols-1 gap-3 border-b border-brand-green/10 px-6 py-4 sm:grid-cols-2 lg:grid-cols-[1fr_1.5fr_1fr_1fr_auto] lg:items-end">
+              <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">Status
+                <select value={adminFilters.status} onChange={(event) => updateAdminFilter("status", event.target.value as AdminWasteFilters["status"])} className="mt-1 w-full rounded-xl border border-brand-green/20 bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-brand-green">
+                  <option value="pending">Pending</option>
+                  <option value="approved">Approved</option>
+                  <option value="rejected">Rejected</option>
+                  <option value="">All</option>
+                </select>
+              </label>
+              <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">Partner
+                <select value={adminFilters.clientId} onChange={(event) => updateAdminFilter("clientId", event.target.value)} className="mt-1 w-full rounded-xl border border-brand-green/20 bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-brand-green">
+                  <option value="">All partners</option>
+                  {partnerOptions.map((partner) => <option key={partner._id} value={partner._id}>{partner.name} · {partner.clientCode}</option>)}
+                </select>
+              </label>
+              <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">From
+                <input type="date" value={adminFilters.startDate} max={adminFilters.endDate || undefined} onChange={(event) => updateAdminFilter("startDate", event.target.value)} className="mt-1 w-full rounded-xl border border-brand-green/20 px-3 py-2 text-sm font-normal text-brand-green" />
+              </label>
+              <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">To
+                <input type="date" value={adminFilters.endDate} min={adminFilters.startDate || undefined} onChange={(event) => updateAdminFilter("endDate", event.target.value)} className="mt-1 w-full rounded-xl border border-brand-green/20 px-3 py-2 text-sm font-normal text-brand-green" />
+              </label>
+              <button type="button" onClick={() => setAdminFilters(defaultAdminFilters)} disabled={!filtersActive} className="rounded-full px-4 py-2 text-sm font-semibold text-brand-green underline-offset-4 hover:underline disabled:opacity-40 disabled:hover:no-underline">Clear</button>
+            </div>
+          )}
+          {user.role === "client" && approvedKg !== null && (
+            <div className="border-b border-brand-green/10 px-6 py-5">
+              <div className="rounded-2xl bg-emerald-50 px-5 py-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800/70">Total approved</p>
+                <p className="mt-1 text-2xl font-semibold text-brand-green">{approvedKg.toLocaleString()} kg</p>
+                <p className="mt-1 text-xs text-brand-green/60">Pending and rejected entries are not included.</p>
+              </div>
+            </div>
+          )}
+          {loadingData ? <p className="px-6 py-12 text-center text-brand-green/60">Loading entries…</p> : entries.length === 0 ? <p className="px-6 py-12 text-center text-brand-green/60">{user.role === "admin" ? (filtersActive ? "No entries match these filters." : "Nothing awaiting review.") : "No submissions yet."}</p> : (
             <div className="divide-y divide-brand-green/10">
               {entries.map((entry) => {
                 const client = typeof entry.clientId === "string" ? null : entry.clientId;
