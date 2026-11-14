@@ -56,7 +56,8 @@ export default function PortalPage() {
     try {
       const [result, summary]: [Paginated<WasteEntry>, { approvedKg: number } | null] = user.role === "admin"
         ? [await api.adminWasteEntries(adminFilters), null]
-        : await Promise.all([api.myWasteEntries(), api.myWasteSummary()]);
+        // The total is secondary: if it fails, still show the entries.
+        : await Promise.all([api.myWasteEntries(), api.myWasteSummary().catch(() => null)]);
       const nextEntries = Array.isArray(result.data) ? result.data : [];
       setApprovedKg(summary && Number.isFinite(summary.approvedKg) ? summary.approvedKg : null);
       setEntries(nextEntries);
