@@ -72,14 +72,21 @@ export function Footer() {
                     <motion.div variants={itemVariants}>
                         <h4 className="font-bold text-brand-green mb-5 text-base uppercase tracking-wide">Quick Links</h4>
                         <ul className="space-y-3">
-                            {['About', 'Our Extracts', 'Markets', 'Technology', 'Impact'].map((item) => (
-                                <li key={item}>
+                            {[
+                                { name: 'About', href: '/about' },
+                                { name: 'Our Extracts', href: '/extracts' },
+                                { name: 'Markets', href: '/markets' },
+                                { name: 'Technology', href: '/technology' },
+                                { name: 'Impact', href: '/impact' },
+                                { name: 'Insights', href: '/insights' },
+                            ].map((item) => (
+                                <li key={item.name}>
                                     <Link
-                                        href={item === 'Our Extracts' ? '/extracts' : item === 'Markets' ? '/markets' : item === 'Technology' ? '/technology' : item === 'Impact' ? '/impact' : item === 'About' ? '/about' : '#'}
+                                        href={item.href}
                                         className="text-brand-green/70 hover:text-brand-green transition-colors font-medium flex items-center gap-2 group"
                                     >
                                         <ArrowRight className="w-4 h-0 opacity-0 -ml-4 group-hover:ml-0 group-hover:opacity-100 transition-all duration-300 text-brand-green" />
-                                        {item}
+                                        {item.name}
                                     </Link>
                                 </li>
                             ))}
