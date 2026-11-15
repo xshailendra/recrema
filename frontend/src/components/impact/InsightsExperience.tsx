@@ -9,7 +9,7 @@ import { api, type PublicImpactSummary, type PublicImpactTrend } from "@/lib/api
 import { Container } from "@/components/ui/core";
 
 const numberFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 });
-const emissionsFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 3 });
+const emissionsFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 });
 const methaneFactor = 0.072;
 const co2eFactor = 2.016;
 
@@ -129,10 +129,10 @@ export function InsightsExperience() {
             </div>
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-              <article className="relative overflow-hidden rounded-3xl bg-brand-green p-7 text-white shadow-xl md:p-9">
+              <article className="@container relative min-w-0 overflow-hidden rounded-3xl bg-brand-green p-7 text-white shadow-xl md:p-9">
                 <div className="absolute -right-9 -top-9 h-32 w-32 rounded-full border border-white/10" />
                 <Recycle aria-hidden="true" className="h-6 w-6 text-brand-yellow" />
-                <p className="mt-10 font-display text-5xl md:text-6xl">{numberFormat.format(summary.totalWasteKg)}<span className="ml-2 text-lg font-sans font-semibold text-white/60">kg</span></p>
+                <p className="mt-10 whitespace-nowrap font-display leading-none" style={fitMetricFont(numberFormat.format(summary.totalWasteKg), 2)}>{numberFormat.format(summary.totalWasteKg)}<span className="ml-2 text-lg font-sans font-semibold text-white/60">kg</span></p>
                 <h3 className="mt-3 text-sm font-semibold text-white/75">Waste Upcycled (KG)</h3>
                 <p className="mt-2 text-xs text-white/50">Approved waste quantity</p>
               </article>
@@ -264,11 +264,20 @@ export function InsightsExperience() {
   );
 }
 
+// Scale a metric's font so the whole number fits on one line inside its card.
+// cqi = 1% of the card's content width. In Anton, digits are ~0.45em wide and , . about 0.2em.
+// `reservedRem` leaves room for a fixed-size suffix such as the "kg" label.
+function fitMetricFont(text: string, reservedRem = 0): React.CSSProperties {
+  const widthEm = [...text].reduce((sum, char) => sum + (/[,.]/.test(char) ? 0.2 : 0.45), 0);
+  const available = reservedRem ? `(95cqi - ${reservedRem}rem)` : "95cqi";
+  return { fontSize: `clamp(1.5rem, calc(${available} / ${widthEm.toFixed(2)}), 3.75rem)` };
+}
+
 function MetricCard({ icon: Icon, value, label, detail }: { icon: typeof Users; value: string; label: string; detail: string }) {
   return (
-    <article className="rounded-3xl border border-brand-green/10 bg-white p-7 shadow-lg md:p-9">
+    <article className="@container min-w-0 rounded-3xl border border-brand-green/10 bg-white p-7 shadow-lg md:p-9">
       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-yellow/30"><Icon aria-hidden="true" className="h-6 w-6 text-brand-green" /></div>
-      <p className="mt-10 font-display text-5xl text-brand-green md:text-6xl">{value}</p>
+      <p className="mt-10 whitespace-nowrap font-display leading-none text-brand-green" style={fitMetricFont(value)}>{value}</p>
       <h3 className="mt-3 text-sm font-semibold text-brand-green/75">{label}</h3>
       <p className="mt-2 text-xs text-brand-green/45">{detail}</p>
     </article>
