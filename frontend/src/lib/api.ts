@@ -169,4 +169,9 @@ export const api = {
     requireData(await request<Partner>(`/admin/partners/${encodeURIComponent(id)}`, { method: "DELETE" })),
   approveWasteEntry: async (id: string) =>
     requireData(await request<WasteEntry>(`/admin/waste/${encodeURIComponent(id)}/approve`, { method: "PATCH" })),
+  rejectWasteEntry: async (id: string, rejectionReason: string) =>
+    requireData(await request<WasteEntry>(`/admin/waste/${encodeURIComponent(id)}/reject`, {
+      method: "PATCH",
+      body: JSON.stringify({ rejectionReason }),
+    })),
 };

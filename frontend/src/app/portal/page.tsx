@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ApiError, api, type AdminWasteFilters, type Paginated, type Partner, type WasteEntry } from "@/lib/api";
+import { ApiError, api, type AdminWasteFilters, type Paginated, type WasteEntry } from "@/lib/api";
 
 const defaultAdminFilters: AdminWasteFilters = { status: "pending", clientId: "", startDate: "", endDate: "" };
 const statusTitles: Record<AdminWasteFilters["status"], string> = {
@@ -14,6 +14,7 @@ const statusTitles: Record<AdminWasteFilters["status"], string> = {
 };
 import { useAuth } from "@/context/AuthProvider";
 import PartnerManagement from "@/components/portal/PartnerManagement";
+import PartnerSearch from "@/components/portal/PartnerSearch";
 
 function displayError(error: unknown) {
   return error instanceof ApiError ? error.message : "Something went wrong. Please try again.";
@@ -26,28 +27,24 @@ export default function PortalPage() {
   const [total, setTotal] = useState(0);
   const [approvedKg, setApprovedKg] = useState<number | null>(null);
   const [loadingData, setLoadingData] = useState(false);
+  const [page, setPage] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [quantityKg, setQuantityKg] = useState("");
   const [wasteDate, setWasteDate] = useState(new Date().toISOString().slice(0, 10));
   const [notes, setNotes] = useState("");
   const [actionId, setActionId] = useState("");
+  const [rejectingId, setRejectingId] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
   const [adminSection, setAdminSection] = useState<"pending" | "partners">("pending");
   const [adminFilters, setAdminFilters] = useState<AdminWasteFilters>(defaultAdminFilters);
-  const [partnerOptions, setPartnerOptions] = useState<Partner[]>([]);
 
   const filtersActive = adminFilters.status !== defaultAdminFilters.status || Boolean(adminFilters.clientId || adminFilters.startDate || adminFilters.endDate);
 
   function updateAdminFilter<K extends keyof AdminWasteFilters>(key: K, value: AdminWasteFilters[K]) {
     setAdminFilters((current) => ({ ...current, [key]: value }));
   }
-
-  useEffect(() => {
-    if (user?.role !== "admin") return;
-    api.partners(1, 100)
-      .then((result) => setPartnerOptions([...result.data].sort((a, b) => a.name.localeCompare(b.name))))
-      .catch(() => setPartnerOptions([]));
-  }, [user]);
 
   const loadEntries = useCallback(async () => {
     if (!user) return;
@@ -61,6 +58,7 @@ export default function PortalPage() {
       const nextEntries = Array.isArray(result.data) ? result.data : [];
       setApprovedKg(summary && Number.isFinite(summary.approvedKg) ? summary.approvedKg : null);
       setEntries(nextEntries);
+      setPage(1);
       setTotal(Number.isFinite(result.pagination?.total) ? result.pagination.total : nextEntries.length);
     } catch (cause) {
       if (cause instanceof ApiError && cause.status === 401) {
@@ -73,6 +71,28 @@ export default function PortalPage() {
       setLoadingData(false);
     }
   }, [user, adminFilters, refreshUser, router]);
+
+  async function loadMoreEntries() {
+    if (!user) return;
+    const nextPage = page + 1;
+    setLoadingMore(true);
+    setError("");
+    try {
+      const result = user.role === "admin"
+        ? await api.adminWasteEntries(adminFilters, nextPage)
+        : await api.myWasteEntries(nextPage);
+      setEntries((current) => {
+        const seen = new Set(current.map((entry) => entry._id));
+        return [...current, ...result.data.filter((entry) => !seen.has(entry._id))];
+      });
+      setPage(nextPage);
+      if (Number.isFinite(result.pagination?.total)) setTotal(result.pagination.total);
+    } catch (cause) {
+      setError(displayError(cause));
+    } finally {
+      setLoadingMore(false);
+    }
+  }
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/login");
@@ -99,6 +119,30 @@ export default function PortalPage() {
       setError(displayError(cause));
     } finally {
       setSaving(false);
+    }
+  }
+
+  function startRejecting(id: string) {
+    setRejectingId(id);
+    setRejectionReason("");
+    setError("");
+  }
+
+  async function rejectEntry(event: FormEvent<HTMLFormElement>, id: string) {
+    event.preventDefault();
+    const reason = rejectionReason.trim();
+    if (!reason) return;
+    setActionId(id);
+    setError("");
+    try {
+      await api.rejectWasteEntry(id, reason);
+      setRejectingId("");
+      setRejectionReason("");
+      await loadEntries();
+    } catch (cause) {
+      setError(displayError(cause));
+    } finally {
+      setActionId("");
     }
   }
 
@@ -187,10 +231,7 @@ export default function PortalPage() {
                 </select>
               </label>
               <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">Partner
-                <select value={adminFilters.clientId} onChange={(event) => updateAdminFilter("clientId", event.target.value)} className="mt-1 w-full rounded-xl border border-brand-green/20 bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-brand-green">
-                  <option value="">All partners</option>
-                  {partnerOptions.map((partner) => <option key={partner._id} value={partner._id}>{partner.name} · {partner.clientCode}</option>)}
-                </select>
+                <PartnerSearch value={adminFilters.clientId} onChange={(partnerId) => updateAdminFilter("clientId", partnerId)} />
               </label>
               <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">From
                 <input type="date" value={adminFilters.startDate} max={adminFilters.endDate || undefined} onChange={(event) => updateAdminFilter("startDate", event.target.value)} className="mt-1 w-full rounded-xl border border-brand-green/20 px-3 py-2 text-sm font-normal text-brand-green" />
@@ -214,18 +255,43 @@ export default function PortalPage() {
             <div className="divide-y divide-brand-green/10">
               {entries.map((entry) => {
                 const client = typeof entry.clientId === "string" ? null : entry.clientId;
-                return <article key={entry._id} className="flex flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="font-semibold text-brand-green">{entry.quantityKg.toLocaleString()} kg <span className="font-normal text-brand-green/60">· {new Date(entry.wasteDate).toLocaleDateString()}</span></p>
-                    {client && <p className="mt-1 text-sm text-brand-green/60">{client.name} · {client.clientCode || client.email}</p>}
-                    {entry.notes && <p className="mt-1 text-sm text-brand-green/70">{entry.notes}</p>}
+                const busy = actionId === entry._id;
+                const rejecting = rejectingId === entry._id;
+                return <article key={entry._id} className="px-6 py-5">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <p className="font-semibold text-brand-green">{entry.quantityKg.toLocaleString()} kg <span className="font-normal text-brand-green/60">· {new Date(entry.wasteDate).toLocaleDateString()}</span></p>
+                      {client && <p className="mt-1 text-sm text-brand-green/60">{client.name} · {client.clientCode || client.email}</p>}
+                      {entry.notes && <p className="mt-1 text-sm text-brand-green/70">{entry.notes}</p>}
+                      {entry.status === "rejected" && entry.rejectionReason && <p className="mt-1 text-sm text-red-800">Reason: {entry.rejectionReason}</p>}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${entry.status === "approved" ? "bg-emerald-100 text-emerald-800" : entry.status === "rejected" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-900"}`}>{entry.status}</span>
+                      {user.role === "admin" && entry.status === "pending" && !rejecting && <>
+                        <button disabled={busy} onClick={() => startRejecting(entry._id)} className="rounded-full border border-red-200 px-4 py-2 text-sm font-semibold text-red-700 hover:bg-red-50 disabled:opacity-60">Reject</button>
+                        <button disabled={busy} onClick={() => void approveEntry(entry._id)} className="rounded-full bg-brand-green px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{busy ? "Saving…" : "Approve"}</button>
+                      </>}
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ${entry.status === "approved" ? "bg-emerald-100 text-emerald-800" : entry.status === "rejected" ? "bg-red-100 text-red-800" : "bg-amber-100 text-amber-900"}`}>{entry.status}</span>
-                    {user.role === "admin" && entry.status === "pending" && <button disabled={actionId === entry._id} onClick={() => void approveEntry(entry._id)} className="rounded-full bg-brand-green px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{actionId === entry._id ? "Saving…" : "Approve"}</button>}
-                  </div>
+                  {user.role === "admin" && entry.status === "pending" && rejecting && (
+                    <form onSubmit={(event) => void rejectEntry(event, entry._id)} className="mt-4 flex flex-col gap-3 rounded-2xl bg-red-50 p-4 sm:flex-row sm:items-end">
+                      <label className="flex-1 text-sm font-semibold text-red-900">Reason for rejection
+                        <input autoFocus required maxLength={1000} value={rejectionReason} onChange={(event) => setRejectionReason(event.target.value)} placeholder="Shown to the partner" className="mt-1 w-full rounded-xl border border-red-200 bg-white px-3 py-2 text-sm font-normal text-brand-green" />
+                      </label>
+                      <div className="flex gap-2">
+                        <button type="button" disabled={busy} onClick={() => setRejectingId("")} className="rounded-full border border-brand-green/20 bg-white px-4 py-2 text-sm font-semibold text-brand-green disabled:opacity-60">Cancel</button>
+                        <button type="submit" disabled={busy || !rejectionReason.trim()} className="rounded-full bg-red-700 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60">{busy ? "Rejecting…" : "Confirm reject"}</button>
+                      </div>
+                    </form>
+                  )}
                 </article>;
               })}
+              {entries.length < total && (
+                <div className="flex flex-col items-center gap-2 px-6 py-5">
+                  <p className="text-xs text-brand-green/50">Showing {entries.length} of {total}</p>
+                  <button onClick={() => void loadMoreEntries()} disabled={loadingMore} className="rounded-full border border-brand-green/20 px-5 py-2 text-sm font-semibold text-brand-green disabled:opacity-50">{loadingMore ? "Loading…" : "Load more"}</button>
+                </div>
+              )}
             </div>
           )}
         </section>}
