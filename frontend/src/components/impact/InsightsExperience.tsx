@@ -7,11 +7,10 @@ import { motion } from "framer-motion";
 import { ArrowDown, ArrowRight, Coffee, Factory, Leaf, Recycle, Users } from "lucide-react";
 import { api, type PublicImpactSummary, type PublicImpactTrend } from "@/lib/api";
 import { Container } from "@/components/ui/core";
+import { co2eFactor, impactNumberFormat, methaneFactor } from "@/lib/impact";
 
-const numberFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 });
-const emissionsFormat = new Intl.NumberFormat("en-IN", { maximumFractionDigits: 1 });
-const methaneFactor = 0.072;
-const co2eFactor = 2.016;
+const numberFormat = impactNumberFormat;
+const emissionsFormat = impactNumberFormat;
 
 const steps = [
   { number: "01", icon: Coffee, title: "Collect", copy: "Spent coffee grounds are gathered through our partner network." },

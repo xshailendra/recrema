@@ -15,6 +15,7 @@ const statusTitles: Record<AdminWasteFilters["status"], string> = {
 import { useAuth } from "@/context/AuthProvider";
 import PartnerManagement from "@/components/portal/PartnerManagement";
 import PartnerSearch from "@/components/portal/PartnerSearch";
+import { co2eFactor, impactNumberFormat, methaneFactor } from "@/lib/impact";
 
 function displayError(error: unknown) {
   return error instanceof ApiError ? error.message : "Something went wrong. Please try again.";
@@ -26,6 +27,7 @@ export default function PortalPage() {
   const [entries, setEntries] = useState<WasteEntry[]>([]);
   const [total, setTotal] = useState(0);
   const [approvedKg, setApprovedKg] = useState<number | null>(null);
+  const [summaryFailed, setSummaryFailed] = useState(false);
   const [loadingData, setLoadingData] = useState(false);
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -56,7 +58,9 @@ export default function PortalPage() {
         // The total is secondary: if it fails, still show the entries.
         : await Promise.all([api.myWasteEntries(), api.myWasteSummary().catch(() => null)]);
       const nextEntries = Array.isArray(result.data) ? result.data : [];
-      setApprovedKg(summary && Number.isFinite(summary.approvedKg) ? summary.approvedKg : null);
+      const summaryOk = summary !== null && Number.isFinite(summary.approvedKg);
+      setApprovedKg(summaryOk ? summary.approvedKg : null);
+      setSummaryFailed(user.role === "client" && !summaryOk);
       setEntries(nextEntries);
       setPage(1);
       setTotal(Number.isFinite(result.pagination?.total) ? result.pagination.total : nextEntries.length);
@@ -242,12 +246,27 @@ export default function PortalPage() {
               <button type="button" onClick={() => setAdminFilters(defaultAdminFilters)} disabled={!filtersActive} className="rounded-full px-4 py-2 text-sm font-semibold text-brand-green underline-offset-4 hover:underline disabled:opacity-40 disabled:hover:no-underline">Clear</button>
             </div>
           )}
-          {user.role === "client" && approvedKg !== null && (
+          {user.role === "client" && (approvedKg !== null || summaryFailed) && (
             <div className="border-b border-brand-green/10 px-6 py-5">
               <div className="rounded-2xl bg-emerald-50 px-5 py-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800/70">Total approved</p>
-                <p className="mt-1 text-2xl font-semibold text-brand-green">{approvedKg.toLocaleString()} kg</p>
-                <p className="mt-1 text-xs text-brand-green/60">Pending and rejected entries are not included.</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-emerald-800/70">Your approved impact</p>
+                {approvedKg !== null ? (
+                  <dl className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    {[
+                      { label: "Waste Upcycled", value: approvedKg, unit: "kg" },
+                      { label: "Methane Emissions Averted", value: approvedKg * methaneFactor, unit: "kg CH₄" },
+                      { label: "CO₂e Emissions Avoided", value: approvedKg * co2eFactor, unit: "kg CO₂e" },
+                    ].map((metric) => (
+                      <div key={metric.label} className="rounded-xl bg-white/70 px-4 py-3">
+                        <dt className="text-xs font-semibold text-brand-green/60">{metric.label}</dt>
+                        <dd className="mt-1 text-2xl font-semibold text-brand-green">{impactNumberFormat.format(metric.value)} <span className="text-sm font-normal text-brand-green/60">{metric.unit}</span></dd>
+                      </div>
+                    ))}
+                  </dl>
+                ) : (
+                  <p className="mt-2 text-sm text-brand-green/70">Your totals are unavailable right now. Please try Refresh, or check back shortly.</p>
+                )}
+                <p className="mt-3 text-xs text-brand-green/60">Based on your approved entries only. Pending and rejected entries are not included.</p>
               </div>
             </div>
           )}
