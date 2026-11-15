@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApiError, api, type AdminWasteFilters, type Paginated, type WasteEntry } from "@/lib/api";
 
-const defaultAdminFilters: AdminWasteFilters = { status: "pending", clientId: "", startDate: "", endDate: "" };
+const defaultAdminFilters: AdminWasteFilters = { status: "", clientId: "", startDate: "", endDate: "" };
 const statusTitles: Record<AdminWasteFilters["status"], string> = {
   pending: "Awaiting review",
   approved: "Approved entries",
@@ -189,12 +189,12 @@ export default function PortalPage() {
 
         <section className="mb-8 rounded-3xl bg-brand-green p-7 text-white md:p-10">
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-yellow">{user.role === "admin" ? "Operations" : "Your circular impact"}</p>
-          <h1 className="mt-2 font-display text-4xl uppercase md:text-5xl">{user.role === "admin" && adminSection === "partners" ? "Partner management" : user.role === "admin" ? "Pending submissions" : "Coffee waste submissions"}</h1>
-          <p className="mt-3 text-white/75">{user.role === "admin" ? adminSection === "partners" ? "Create and manage partner accounts and portal access." : "Review partner submissions awaiting approval." : "Submit collected coffee waste and follow its review status."}</p>
+          <h1 className="mt-2 font-display text-4xl uppercase md:text-5xl">{user.role === "admin" && adminSection === "partners" ? "Partner management" : user.role === "admin" ? "Waste submissions" : "Coffee waste submissions"}</h1>
+          <p className="mt-3 text-white/75">{user.role === "admin" ? adminSection === "partners" ? "Create and manage partner accounts and portal access." : "Review, approve and search all partner submissions." : "Submit collected coffee waste and follow its review status."}</p>
         </section>
 
         {user.role === "admin" && <nav aria-label="Admin sections" className="mb-6 flex flex-wrap gap-2">
-          <button aria-current={adminSection === "pending" ? "page" : undefined} onClick={() => setAdminSection("pending")} className={`rounded-full px-5 py-2.5 text-sm font-semibold ${adminSection === "pending" ? "bg-brand-green text-white" : "border border-brand-green/20 bg-white text-brand-green"}`}>Pending submissions</button>
+          <button aria-current={adminSection === "pending" ? "page" : undefined} onClick={() => setAdminSection("pending")} className={`rounded-full px-5 py-2.5 text-sm font-semibold ${adminSection === "pending" ? "bg-brand-green text-white" : "border border-brand-green/20 bg-white text-brand-green"}`}>Submissions</button>
           <button aria-current={adminSection === "partners" ? "page" : undefined} onClick={() => setAdminSection("partners")} className={`rounded-full px-5 py-2.5 text-sm font-semibold ${adminSection === "partners" ? "bg-brand-green text-white" : "border border-brand-green/20 bg-white text-brand-green"}`}>Partner Management</button>
         </nav>}
 
@@ -224,10 +224,10 @@ export default function PortalPage() {
             <div className="grid grid-cols-1 gap-3 border-b border-brand-green/10 px-6 py-4 sm:grid-cols-2 lg:grid-cols-[1fr_1.5fr_1fr_1fr_auto] lg:items-end">
               <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">Status
                 <select value={adminFilters.status} onChange={(event) => updateAdminFilter("status", event.target.value as AdminWasteFilters["status"])} className="mt-1 w-full rounded-xl border border-brand-green/20 bg-white px-3 py-2 text-sm font-normal normal-case tracking-normal text-brand-green">
+                  <option value="">All</option>
                   <option value="pending">Pending</option>
                   <option value="approved">Approved</option>
                   <option value="rejected">Rejected</option>
-                  <option value="">All</option>
                 </select>
               </label>
               <label className="text-xs font-semibold uppercase tracking-wide text-brand-green/60">Partner
@@ -251,7 +251,7 @@ export default function PortalPage() {
               </div>
             </div>
           )}
-          {loadingData ? <p className="px-6 py-12 text-center text-brand-green/60">Loading entries…</p> : entries.length === 0 ? <p className="px-6 py-12 text-center text-brand-green/60">{user.role === "admin" ? (filtersActive ? "No entries match these filters." : "Nothing awaiting review.") : "No submissions yet."}</p> : (
+          {loadingData ? <p className="px-6 py-12 text-center text-brand-green/60">Loading entries…</p> : entries.length === 0 ? <p className="px-6 py-12 text-center text-brand-green/60">{user.role === "admin" ? (filtersActive ? "No entries match these filters." : "No entries yet.") : "No submissions yet."}</p> : (
             <div className="divide-y divide-brand-green/10">
               {entries.map((entry) => {
                 const client = typeof entry.clientId === "string" ? null : entry.clientId;
